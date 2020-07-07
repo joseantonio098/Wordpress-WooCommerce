@@ -1,0 +1,26 @@
+1- Ocean Extra ( OceanWP ) 
+** Añade más funcionalidades al tema instalado
+
+2- WooCommerce ( Automattic )
+** Permite crear (diseñar) una tienda online
+
+3- TI WooCommerce Wishlist Plugin ( TemplateInvaders )
+** Permite agregar una lista de deseos
+
+4- Smart Slider 3 ( Nextend )
+** Permite agregar slider + detalles personalizados
+
+5- Elementor Page Builder ( Elementor.com )
+6- Premium Addons for Elementor ( Leap13 )
+	.1– Premium Título
+	.2– Premium Banner
+	.3– Premium Cuenta atrás
+	.4– Premium Texto llamativo
+	.5– Premium Cabecera dual
+7- Instagram Feed ( Smash Balloon )
+	.1- Premium Blog
+8- myStickymenu ( Premio )
+9- WP Mail SMTP by WPForms ( WPForms )
+10- Contact Form by WPForms – Drag & Drop Form Builder for WordPress ( WPForms )
+11- WooCommerce Variation Swatches ( Emran Ahmed )
+12- Beeketing for WooCommerce (Beeketing)
