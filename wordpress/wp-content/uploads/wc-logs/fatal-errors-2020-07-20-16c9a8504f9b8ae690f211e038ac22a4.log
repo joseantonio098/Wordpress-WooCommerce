@@ -1,0 +1,16 @@
+2020-07-20T22:01:00+00:00 CRITICAL Out of memory (allocated 62914560) (tried to allocate 20480 bytes) en C:\xampp\htdocs\Woocommerce\wordpress\wp-content\plugins\ocean-extra\includes\metabox\butterbean\class-butterbean.php en la línea 800
+
+2020-07-20T22:01:00+00:00 CRITICAL Out of memory (allocated 4194304) (tried to allocate 282624 bytes) in C:\xampp\htdocs\Woocommerce\wordpress\wp-includes\pomo\streams.php on line 215
+
+2020-07-20T22:02:18+00:00 CRITICAL Out of memory (allocated 6291456) (tried to allocate 8192 bytes) en C:\xampp\htdocs\Woocommerce\wordpress\wp-admin\includes\ajax-actions.php en la línea 2652
+
+2020-07-20T22:02:18+00:00 CRITICAL Out of memory (allocated 35651584) (tried to allocate 8192 bytes) en C:\xampp\htdocs\Woocommerce\wordpress\wp-admin\includes\ajax-actions.php en la línea 2652
+
+2020-07-20T22:02:21+00:00 CRITICAL Out of memory (allocated 6291456) (tried to allocate 65536 bytes) en C:\xampp\htdocs\Woocommerce\wordpress\wp-content\plugins\elementor\includes\managers\widgets.php en la línea 79
+
+2020-07-20T22:02:22+00:00 CRITICAL Out of memory (allocated 6291456) (tried to allocate 65536 bytes) en C:\xampp\htdocs\Woocommerce\wordpress\wp-content\plugins\elementor\includes\managers\widgets.php en la línea 79
+
+2020-07-20T22:02:27+00:00 CRITICAL Out of memory (allocated 4194304) (tried to allocate 4194304 bytes) en C:\xampp\htdocs\Woocommerce\wordpress\wp-content\plugins\ocean-extra\includes\metabox\butterbean\inc\controls\class-control-multi-avatars.php en la línea 21
+
+2020-07-20T22:02:43+00:00 CRITICAL Out of memory (allocated 4194304) (tried to allocate 4194304 bytes) en C:\xampp\htdocs\Woocommerce\wordpress\wp-content\plugins\ocean-extra\includes\metabox\butterbean\class-butterbean.php en la línea 167
+

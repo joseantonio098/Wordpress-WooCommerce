@@ -11,12 +11,16 @@
 ** Permite agregar slider + detalles personalizados
 
 5- Elementor Page Builder ( Elementor.com )
+** Permite agregar múltiples elementos a una página (Enc-Txt-Btn-Img...)
+
 6- Premium Addons for Elementor ( Leap13 )
+** Permite agregar más funcionalidades (Más elementos) a Elementor
 	.1– Premium Título
 	.2– Premium Banner
 	.3– Premium Cuenta atrás
 	.4– Premium Texto llamativo
 	.5– Premium Cabecera dual
+
 7- Instagram Feed ( Smash Balloon )
 	.1- Premium Blog
 8- myStickymenu ( Premio )
