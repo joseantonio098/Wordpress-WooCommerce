@@ -22,7 +22,9 @@
 	.5– Premium Cabecera dual
 
 7- Instagram Feed ( Smash Balloon )
+** Permite insertar nuestras publicaciones de Instagram
 	.1- Premium Blog
+
 8- myStickymenu ( Premio )
 9- WP Mail SMTP by WPForms ( WPForms )
 10- Contact Form by WPForms – Drag & Drop Form Builder for WordPress ( WPForms )
