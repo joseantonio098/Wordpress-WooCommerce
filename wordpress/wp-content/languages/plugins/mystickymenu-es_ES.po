@@ -1,0 +1,469 @@
+# Translation of Plugins - Sticky Menu on Scroll, Sticky Header, Floating Notification Bar for Any Theme &#8211; myStickymenu - Stable (latest release) in Spanish (Spain)
+# This file is distributed under the same license as the Plugins - Sticky Menu on Scroll, Sticky Header, Floating Notification Bar for Any Theme &#8211; myStickymenu - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2020-06-25 07:26:20+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/3.0.0-alpha.2\n"
+"Language: es\n"
+"Project-Id-Version: Plugins - Sticky Menu on Scroll, Sticky Header, Floating Notification Bar for Any Theme &#8211; myStickymenu - Stable (latest release)\n"
+
+#: mystickymenu.php:399
+msgid "Sticky Text Color"
+msgstr "Color del texto fijo"
+
+#: welcome-bar.php:229
+msgid "Show the Welcome Bar on every page"
+msgstr "Mostrar la barra de bienvenida en cada página"
+
+#: welcome-bar.php:228
+msgid "Show the Welcome Bar in the next visit"
+msgstr "Mostrar la barra de bienvenida en la siguiente visita"
+
+#: welcome-bar.php:227
+msgid "Don't show the Welcome Bar"
+msgstr "No mostrar la barra de bienvenida"
+
+#: welcome-bar.php:223
+msgid "After Submission"
+msgstr "Después de enviar"
+
+#: welcome-bar.php:206
+msgid "Thank you screen (Upgrade Now)"
+msgstr "Pantalla de agradecimiento (actualizar ahora)"
+
+#: welcome-bar.php:200
+msgid "Button Submission"
+msgstr "Botón de envío"
+
+#: welcome-bar.php:351
+msgid "myStickymenu is currently off"
+msgstr "myStickymenu está actualmente desconectado"
+
+#: welcome-bar.php:193
+msgid "Wobble"
+msgstr "Tambaleo"
+
+#: welcome-bar.php:192
+msgid "Heartbeat"
+msgstr "Latido"
+
+#: welcome-bar.php:191
+msgid "Tada"
+msgstr "Tachán"
+
+#: welcome-bar.php:190
+msgid "Swing"
+msgstr "Balanceo"
+
+#: welcome-bar.php:189
+msgid "Shake"
+msgstr "Sacudida"
+
+#: welcome-bar.php:188
+msgid "Flash"
+msgstr "Flash"
+
+#: welcome-bar.php:187
+msgid "None"
+msgstr "Ninguno"
+
+#: welcome-bar.php:183
+msgid "Attention Effect"
+msgstr "Efecto de llamada de atencón"
+
+#: mystickymenu.php:232 mystickymenu.php:714 mystickymenu.php:743
+msgid "Sticky Menu"
+msgstr "Menú fijo"
+
+#: mystickymenu.php:685
+msgid "Reset Settings saved."
+msgstr "Restablecer ajustes guardados."
+
+#: welcome-bar.php:353
+msgid "Your Welcome Bar is currently turned off, would you like to save and show it on your site?"
+msgstr "Tu barra de bienvenida está actualmente desactivada, ¿deseas guardarla y mostrarla en tu sitio?"
+
+#: welcome-bar.php:320
+msgid "Preview"
+msgstr "Vista previa"
+
+#: welcome-bar.php:300 mystickymenu.php:462 mystickymenu.php:500
+msgid "Select Rule"
+msgstr "Seleccionar regla"
+
+#: welcome-bar.php:295 mystickymenu.php:457 mystickymenu.php:495
+msgid "Don't show on"
+msgstr "No mostrar en"
+
+#: welcome-bar.php:294 mystickymenu.php:456 mystickymenu.php:494
+msgid "Show on"
+msgstr "Mostrar en"
+
+#: welcome-bar.php:287 mystickymenu.php:486
+msgid "Add Rule"
+msgstr "Añadir regla"
+
+#: welcome-bar.php:285 mystickymenu.php:435
+msgid "Page targeting"
+msgstr "Objetivo de la página"
+
+#: welcome-bar.php:279
+msgid "No expiry date"
+msgstr "Sin fecha de caducidad"
+
+#: welcome-bar.php:276
+msgid "Expiry date"
+msgstr "Fecha de caducidad"
+
+#: welcome-bar.php:264
+msgid "After Scroll"
+msgstr "Después del scroll"
+
+#: welcome-bar.php:261
+msgid "After a few seconds"
+msgstr "Después de unos segundos"
+
+#: welcome-bar.php:257
+msgid "Trigger"
+msgstr "Disparador"
+
+#: welcome-bar.php:241
+msgid " Upgrade Now"
+msgstr " Actualizar ahora"
+
+#: welcome-bar.php:237
+msgid "Display Rules"
+msgstr "Reglas de visualización"
+
+#: welcome-bar.php:215
+msgid "Open in a new tab"
+msgstr "Abrir en nueva pestaña"
+
+#: welcome-bar.php:205
+msgid "Close bar"
+msgstr "Cerrar barra"
+
+#: welcome-bar.php:204
+msgid "Redirect to URL"
+msgstr "Redirigir a URL"
+
+#: welcome-bar.php:176
+msgid "Button Text"
+msgstr "Texto del botón"
+
+#: welcome-bar.php:170
+msgid "Button Text Color"
+msgstr "Color de texto del botón"
+
+#: welcome-bar.php:164
+msgid "Button Color"
+msgstr "Color del botón"
+
+#: welcome-bar.php:148 welcome-bar.php:151
+msgid "Button"
+msgstr "Botón"
+
+#: welcome-bar.php:133
+msgid "Show X"
+msgstr "Mostrar X"
+
+#: welcome-bar.php:106
+msgid "Bar Text"
+msgstr "Texto de la barra"
+
+#: welcome-bar.php:97
+msgid "Font Size"
+msgstr "Tamaño de fuente"
+
+#: welcome-bar.php:84
+msgid "Select font family"
+msgstr "Selecciona la familia de fuentes"
+
+#: welcome-bar.php:81
+msgid "Font"
+msgstr "Fuente"
+
+#: welcome-bar.php:75
+msgid "Background Text Color"
+msgstr "Color del texto de fondo"
+
+#: welcome-bar.php:69
+msgid "Background Color"
+msgstr "Color de fondo"
+
+#: welcome-bar.php:59
+msgid "Height"
+msgstr "Altura"
+
+#: welcome-bar.php:53
+msgid "Bottom"
+msgstr "Abajo"
+
+#: welcome-bar.php:49
+msgid "Top"
+msgstr "Arriba"
+
+#: welcome-bar.php:45
+msgid "Position"
+msgstr "Posición"
+
+#: welcome-bar.php:42
+msgid "Design"
+msgstr "Diseño"
+
+#: welcome-bar.php:32 mystickymenu.php:233 mystickymenu.php:715
+#: mystickymenu.php:744
+msgid "Welcome Bar"
+msgstr "Barra de bienvenida"
+
+#. Description of the plugin
+msgid "Simple sticky (fixed on top) menu implementation for navigation menu and Welcome bar for announcements and promotion. After install go to Settings / myStickymenu and change Sticky Class to .your_navbar_class or #your_navbar_id."
+msgstr "Implementación simple de menús fijos (en la parte superior) para menús de navegación y barra de bienvenida para anuncios y promociones. Después de instalar ve a Ajustes / myStickymenu y cambia la clase de menú fijo a .clase_de_tu_barra_de_navegacion o #id_de_tu_barra_de_navegacion."
+
+#: mystickymenu.php:779 mystickymenu.php:812 mystickymenu.php:851
+msgid "Updates & support for lifetime"
+msgstr "Actualizaciones y soporte de por vida"
+
+#: mystickymenu.php:776 mystickymenu.php:809 mystickymenu.php:848
+msgid "Updates & support for 2 years"
+msgstr "Actualizaciones y soporte durante 2 años"
+
+#: mystickymenu.php:773 mystickymenu.php:806 mystickymenu.php:845
+msgid "Updates & support for 1 year"
+msgstr "Actualizaciones y soporte durante 1 año"
+
+#: mystickymenu.php:182 mystickymenu.php:678 mystickymenu.php:688
+msgid "Unable to complete your request"
+msgstr "No ha sido posible completar tu solicitud"
+
+#: mystickymenu.php:72
+msgid "Upgrade"
+msgstr "Actualizar"
+
+#. Author URI of the plugin
+msgid "https://premio.io/downloads/mystickymenu/"
+msgstr "https://premio.io/downloads/mystickymenu/"
+
+#: mystickymenu.php:656
+msgid "Leave a review"
+msgstr "Deja una reseña"
+
+#: welcome-bar.php:346 mystickymenu.php:651
+msgid "Reset"
+msgstr "Restablecer"
+
+#: welcome-bar.php:337 mystickymenu.php:646
+msgid "Save"
+msgstr "Guardar"
+
+#: mystickymenu.php:628
+msgid "<span class=\"description\"><strong>Except for this posts:</strong> </span>"
+msgstr "<span class=\"description\"><strong>Excepto para estas entradas:</strong> </span>"
+
+#: mystickymenu.php:614
+msgid "<span class=\"description\"><strong>Except for this pages:</strong> </span>"
+msgstr "<span class=\"description\"><strong>Excepto para estas páginas:</strong> </span>"
+
+#: mystickymenu.php:606
+msgid "404"
+msgstr "404"
+
+#: mystickymenu.php:600
+msgid "search"
+msgstr "búsqueda"
+
+#: mystickymenu.php:594
+msgid "archives"
+msgstr "archivos"
+
+#: mystickymenu.php:588
+msgid "posts"
+msgstr "entradas"
+
+#: mystickymenu.php:582
+msgid "categories"
+msgstr "categorías"
+
+#: mystickymenu.php:576
+msgid "tags"
+msgstr "etiquetas"
+
+#: mystickymenu.php:570
+msgid "pages"
+msgstr "páginas"
+
+#: mystickymenu.php:564
+msgid "blog page"
+msgstr "página del blog"
+
+#: mystickymenu.php:558
+msgid "front page"
+msgstr "página de inicio"
+
+#: mystickymenu.php:425
+msgid "Hide on Scroll Down"
+msgstr "Ocultar al hacer scroll hacia abajo"
+
+#: mystickymenu.php:353
+msgid "Less than chosen screen width, set 0 to disable"
+msgstr "Menos del ancho de pantalla elegido, configurar a 0 para desactivar"
+
+#: mystickymenu.php:346
+msgid "Fade"
+msgstr "Fundido"
+
+#: mystickymenu.php:342
+msgid "Slide"
+msgstr "Deslizar"
+
+#: welcome-bar.php:141 welcome-bar.php:159 welcome-bar.php:252
+#: mystickymenu.php:315
+msgid "Mobile"
+msgstr "Móvil"
+
+#: welcome-bar.php:137 welcome-bar.php:155 welcome-bar.php:248
+#: mystickymenu.php:309
+msgid "Desktop"
+msgstr "Escritorio"
+
+#: welcome-bar.php:55 welcome-bar.php:65 welcome-bar.php:217
+#: mystickymenu.php:303 mystickymenu.php:426 mystickymenu.php:517
+#: mystickymenu.php:552
+msgid "Upgrade Now"
+msgstr "Actualizar ahora"
+
+#: welcome-bar.php:244 mystickymenu.php:302
+msgid "Devices"
+msgstr "Dispositivos"
+
+#: mystickymenu.php:293
+msgid "Other Class Or ID"
+msgstr "Otra clase o ID"
+
+#: mystickymenu.php:257
+msgid "Select Sticky Menu"
+msgstr "Seleccionar menú fijo"
+
+#: mystickymenu.php:240
+msgid "How To Make a Sticky Header"
+msgstr "Cómo hacer fija una cabecera"
+
+#: mystickymenu.php:234 mystickymenu.php:716 mystickymenu.php:745
+msgid "Upgrade to Pro"
+msgstr "Actualizar a Pro"
+
+#: mystickymenu.php:179 mystickymenu.php:675
+msgid "Settings saved."
+msgstr "Ajustes guardados."
+
+#: mystickymenu.php:327
+msgid "Settings"
+msgstr "Ajustes"
+
+#. Author of the plugin
+msgid "Premio"
+msgstr "Premio"
+
+#. Plugin URI of the plugin
+msgid "https://premio.io/"
+msgstr "https://premio.io/"
+
+#: mystickymenu.php:528
+msgid "CSS ID's and Classes to use:"
+msgstr "IDs CSS y clases a utilizar:"
+
+#: mystickymenu.php:524
+msgid "Add/edit CSS style. Leave it blank for default style."
+msgstr "Añade/edita el estilo CSS. Déjalo en blanco para el estilo por defecto."
+
+#: mystickymenu.php:430
+msgid "Disable sticky menu at scroll down"
+msgstr "Desactivar menú fijo al hacer scroll hacia abajo"
+
+#: mystickymenu.php:375
+msgid "If set to 0 it will use initial Make visible on Scroll value."
+msgstr "Si se configura a 0 usará el valor inicial de hacer visible al hacer scroll."
+
+#: mystickymenu.php:363
+msgid "If set to 0 auto calculate will be used."
+msgstr "Si se configura a 0 se usará el cálculo automático."
+
+#: mystickymenu.php:298
+msgid "menu or header element class or id."
+msgstr "id o clase del elemento de menú o cabecera."
+
+#: mystickymenu.php:523
+msgid "CSS style"
+msgstr "Estilo CSS"
+
+#: mystickymenu.php:242
+msgid "Add sticky menu / header to any theme. <br />Simply change 'Sticky Class' to HTML element class desired to be sticky (div id can be used as well)."
+msgstr "Añade un menú/cabecera fijo a cualquier tema. <br />Simplemente cambia la «Clase del menú fijo» a la clase del elemento HTML que se quiere que sea fijo (también se pueden usar IDs de divs)."
+
+#: mystickymenu.php:635
+msgid "<span class=\"description\">Comma separated list of posts to enable. It should be post name, id or slug. Example: about-us, 1134, Contact Us. Leave blank if you realy want to disable sticky menu for all posts.</span>"
+msgstr "<span class=\"description\">Lista de entradas separadas por comas a activar. Debería ser un id, slug o nombre de entrada. Ejemplo: sobre-nosotros, 1134, Contáctanos. Déjalo en blanco si realmente quieres desactivar el menú fijo en todas las entradas.</span>"
+
+#: mystickymenu.php:621
+msgid "<span class=\"description\">Comma separated list of pages to enable. It should be page name, id or slug. Example: about-us, 1134, Contact Us. Leave blank if you realy want to disable sticky menu for all pages.</span>"
+msgstr "<span class=\"description\">Lista de páginas separadas por comas a activar. Debería ser un id, slug o nombre de entrada. Ejemplo: sobre-nosotros, 1134, Contáctanos. Déjalo en blanco si realmente quieres desactivar el menú fijo en todas las páginas.</span>"
+
+#: mystickymenu.php:551
+msgid "Disable at"
+msgstr "Desactivar en"
+
+#. Plugin Name of the plugin
+msgid "myStickymenu"
+msgstr "myStickymenu"
+
+#: mystickymenu.php:544
+msgid "Use this option if you plan to include CSS Style manually"
+msgstr "Usa esta opción si tienes pensado incluir manualmente estilos CSS"
+
+#: mystickymenu.php:409
+msgid "numbers 1-100."
+msgstr "números 1-100."
+
+#: mystickymenu.php:540
+msgid "Disable CSS style"
+msgstr "Desactivar estilos CSS"
+
+#: mystickymenu.php:337
+msgid "Fade or slide effect"
+msgstr "Efecto de atenuar o deslizar"
+
+#: mystickymenu.php:374
+msgid "Make visible on Scroll at homepage"
+msgstr "Hacer visible cuando se hace scroll en la página de inicio"
+
+#: mystickymenu.php:362
+msgid "Make visible on Scroll"
+msgstr "Hacer visible cuando se hace scroll"
+
+#: mystickymenu.php:352
+msgid "Disable at Small Screen Sizes"
+msgstr "Desactivado en tamaños pequeños de pantalla"
+
+#: mystickymenu.php:393
+msgid "Sticky Transition Time"
+msgstr "Tiempo de transición del menú fijo"
+
+#: mystickymenu.php:408
+msgid "Sticky Opacity"
+msgstr "Opacidad del menú fijo"
+
+#: mystickymenu.php:384
+msgid "Sticky Background Color"
+msgstr "Color de fondo del menú fijo"
+
+#: mystickymenu.php:331
+msgid "Sticky z-index"
+msgstr "Z-index del menú fijo"
+
+#: mystickymenu.php:250
+msgid "Sticky Class"
+msgstr "Clase del menú fijo"

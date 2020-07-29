@@ -26,7 +26,13 @@
 	.1- Premium Blog
 
 8- myStickymenu ( Premio )
+** Permite fijar la barra de menú o cualquier elemento
+
 9- WP Mail SMTP by WPForms ( WPForms )
+** Permite configurar de manera segura el envío de mensajes
+
 10- Contact Form by WPForms – Drag & Drop Form Builder for WordPress ( WPForms )
+** Permite Diseñar y mostrar un formulario en pantalla
+
 11- WooCommerce Variation Swatches ( Emran Ahmed )
 12- Beeketing for WooCommerce (Beeketing)
