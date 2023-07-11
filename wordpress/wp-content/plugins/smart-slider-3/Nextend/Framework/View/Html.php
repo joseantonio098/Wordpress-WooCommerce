@@ -2,6 +2,7 @@
 
 namespace Nextend\Framework\View;
 
+use Nextend\Framework\Platform\Platform;
 use Nextend\Framework\Settings;
 
 class Html {
@@ -14,29 +15,14 @@ class Html {
      */
     private static $renderSpecialAttributesValue = true;
 
-
-    /**
-     * Decodes special HTML entities back to the corresponding characters.
-     * This is the opposite of {@link encode()}.
-     *
-     * @param string $text data to be decoded
-     *
-     * @return string the decoded data
-     * @see   http://www.php.net/manual/en/function.htmlspecialchars-decode.php
-     * @since 1.1.8
-     */
-    public static function decode($text) {
-        return htmlspecialchars_decode($text, ENT_QUOTES);
-    }
-
     /**
      * Generates an HTML element.
      *
      * @param string  $tag         the tag name
-     * @param array   $htmlOptions the element attributes. The values will be HTML-encoded using {@link encode()}.
-     *                             If an 'encode' attribute is given and its value is false,
-     *                             the rest of the attribute values will NOT be HTML-encoded.
-     *                             Since version 1.1.5, attributes whose value is null will not be rendered.
+     * @param array   $htmlOptions the element attributes. The values will be HTML-encoded using
+     *                             {@link encodeAttribute()}. If an 'encode' attribute is given and its value is false,
+     *                             the rest of the attribute values will NOT be HTML-encoded. Since version 1.1.5,
+     *                             attributes whose value is null will not be rendered.
      * @param mixed   $content     the content to be enclosed between open and close element tags. It will not be
      *                             HTML-encoded. If false, it means there is no body content.
      * @param boolean $closeTag    whether to generate the close tag.
@@ -53,7 +39,8 @@ class Html {
      * Generates an open HTML element.
      *
      * @param string $tag         the tag name
-     * @param array  $htmlOptions the element attributes. The values will be HTML-encoded using {@link encode()}.
+     * @param array  $htmlOptions the element attributes. The values will be HTML-encoded using
+     *                            {@link encodeAttribute()}.
      *                            If an 'encode' attribute is given and its value is false,
      *                            the rest of the attribute values will NOT be HTML-encoded.
      *                            Since version 1.1.5, attributes whose value is null will not be rendered.
@@ -88,7 +75,7 @@ class Html {
         $htmlOptions['src'] = $src;
         $htmlOptions['alt'] = $alt;
 
-        return self::tag('img', $htmlOptions, false);
+        return self::tag('img', $htmlOptions, false, false);
     }
 
     /**
@@ -129,7 +116,13 @@ class Html {
             'async' => 1
         );
 
-        if ($htmlOptions === array()) return '';
+        if (empty($htmlOptions)) {
+            return '';
+        }
+
+        if (isset($htmlOptions['style']) && empty($htmlOptions['style'])) {
+            unset($htmlOptions['style']);
+        }
 
         $html = '';
         if (isset($htmlOptions['encode'])) {
@@ -146,7 +139,7 @@ class Html {
                 }
             } else if (isset($specialAttributesNoValue[$name])) {
                 $html .= ' ' . $name;
-            } else if ($value !== null) $html .= ' ' . $name . '="' . ($raw ? $value : self::encode($value)) . '"';
+            } else if ($value !== null) $html .= ' ' . $name . '="' . ($raw ? $value : self::encodeAttribute($value)) . '"';
         }
 
         return $html;
@@ -161,9 +154,21 @@ class Html {
         return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
     }
 
+    /**
+     * @param $text
+     *
+     * @return string
+     */
+    public static function encodeAttribute($text) {
+
+        /**
+         * Do not encode: '
+         */
+        return htmlspecialchars($text, ENT_COMPAT | ENT_HTML5, 'UTF-8');
+    }
+
     public static function link($name, $url = '#', $htmlOptions = array()) {
         $htmlOptions["href"] = $url;
-        //$htmlOptions["encode"] = false;
 
         $url = self::openTag("a", $htmlOptions);
         if (isset($htmlOptions["encode"]) && $htmlOptions["encode"]) {
@@ -195,45 +200,39 @@ class Html {
             );
             $options = array_merge($options, $scriptOptions);
 
-            return self::tag('link', $options, false);
+            return self::tag('link', $options, false, false);
         }
 
-        return self::tag("style", $scriptOptions + array(
-                "type" => "text/css"
-            ), $script);
+        return self::tag("style", $scriptOptions, $script);
     }
 
     /**
      * Insert script
      *
      * @param string $script
-     * @param bool   $file
      *
      * @return string
      */
-    public static function script($script, $file = false) {
-        if ($file) {
-            return self::tag('script', array(
-                    'type' => 'text/javascript',
-                    'src'  => $script
-                ) + self::getScriptAttributes(), '');
-        }
+    public static function script($script) {
 
         return self::tag('script', array(
-            'type'   => 'text/javascript',
             'encode' => false
         ), $script);
     }
 
     public static function scriptFile($script, $attributes = array()) {
         return self::tag('script', array(
-                'type' => 'text/javascript',
-                'src'  => $script
+                'src' => $script
             ) + self::getScriptAttributes() + $attributes, '');
     }
 
     private static function getScriptAttributes() {
         static $attributes = null;
+
+        if (Platform::isAdmin()) {
+            return array();
+        }
+
         if ($attributes === null) {
             if (class_exists('\\Nextend\\Framework\\Settings', false)) {
                 $value       = trim(html_entity_decode(strip_tags(Settings::get('scriptattributes', ''))));
@@ -281,8 +280,11 @@ class Html {
                 unset($array['style']);
             }
             if (isset($array['class'])) {
-                if (!isset($target['class'])) $target['class'] = '';
-                $target['class'] .= ' ' . $array['class'];
+                if (empty($target['class'])) {
+                    $target['class'] = $array['class'];
+                } else {
+                    $target['class'] .= ' ' . $array['class'];
+                }
                 unset($array['class']);
             }
 
@@ -292,7 +294,7 @@ class Html {
         return $target;
     }
 
-    public static function addExcludeLazyLoadAttributes($target) {
+    public static function addExcludeLazyLoadAttributes($target = array()) {
 
         return self::mergeAttributes($target, self::getExcludeLazyLoadAttributes());
     }
@@ -301,23 +303,12 @@ class Html {
         static $attrs;
         if ($attrs === null) {
             $attrs = array(
-                'data-no-lazy' => 1,
-                'data-hack'    => 'data-lazy-src'
+                'class'          => 'skip-lazy',
+                'data-skip-lazy' => 1
             );
 
-            if (class_exists('\FlorianBrinkmann\LazyLoadResponsiveImages\Plugin', false)) {
-                $attrs['data-no-lazyload'] = 1;
-            }
-
-            if (function_exists('thb_lazy_images_filter') || defined('WP_SMUSH_VERSION')) {
-                $attrs['class'] = 'no-lazyload';
-            }
-
-            if (defined('A3_LAZY_LOAD_NAME')) {
-                /**
-                 * @see https://wordpress.org/plugins/a3-lazy-load/
-                 */
-                $attrs['class'] = 'skip-lazy';
+            if (defined('JETPACK__VERSION')) {
+                $attrs['class'] .= ' jetpack-lazy-image';
             }
         }
 

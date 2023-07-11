@@ -78,6 +78,7 @@ class TInvWL_Public_WishlistCounter {
 
 		if ( ! is_array( $menu_ids ) ) {
 			$menu_ids = array( $menu_ids );
+			$menu_ids = array_filter( $menu_ids );
 		}
 
 		foreach ( $menu_ids as $menu_id ) {
@@ -138,7 +139,7 @@ class TInvWL_Public_WishlistCounter {
 						'target'                => '',
 						'attr_title'            => '',
 						'object'                => '',
-						'classes'               => '',
+						'classes'               => array(),
 						'post_content'          => '',
 						'post_excerpt'          => '',
 						'category_post'         => '',

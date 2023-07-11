@@ -47,6 +47,18 @@ class OWP_Install_Demos {
 	}
 
 	/**
+	 * Image URL
+	 *
+	 * @since 1.0.0
+	 */
+	public static function img_url( $demo ) {
+		$url = 'https://demos.oceanwp.org/0images/' . esc_attr( $demo ) . '.png';
+
+		// Return
+		return apply_filters( 'owp_demos_img_url', $url );
+	}
+
+	/**
 	 * Settings page output
 	 *
 	 * @since 1.0.0
@@ -97,7 +109,7 @@ class OWP_Install_Demos {
 							<div class="theme owp-open-popup" data-demo-id="<?php echo esc_attr( $demo ); ?>">
 
 								<div class="theme-screenshot">
-									<img src="https://demos.oceanwp.org/preview/<?php echo esc_attr( $demo ); ?>.jpg" />
+									<img src="<?php echo $this->img_url( $demo ); ?>" />
 
 									<div class="demo-import-loader preview-all preview-all-<?php echo esc_attr( $demo ); ?>"></div>
 
@@ -105,7 +117,7 @@ class OWP_Install_Demos {
 								</div>
 
 								<div class="theme-id-container">
-		
+
 									<h2 class="theme-name" id="<?php echo esc_attr( $demo ); ?>"><span><?php echo ucwords( $demo ); ?></span></h2>
 
 									<div class="theme-actions">

@@ -43,7 +43,7 @@ if (!class_exists('Ocean_Extra_MailChimp_Widget')) {
 
             if ( $email && $apikey && $list_id ) {
 
-                $root = 'https://api.mailchimp.com/2.0';
+                $root = 'https://api.mailchimp.com/3.0';
 
                 if ( strstr( $apikey, '-' ) ) {
                     list( $key, $dc ) = explode( '-', $apikey, 2 );
@@ -55,7 +55,8 @@ if (!class_exists('Ocean_Extra_MailChimp_Widget')) {
                 $params = array(
                     'apikey'            => $apikey,
                     'id'                => $list_id,
-                    'email'             => array( 'email' => $email ),
+                    'email_address'     => $email,
+		            'status'		    => 'subscribed',
                     'double_optin'      => FALSE,
                     'send_welcome'      => FALSE,
                     'replace_interests' => FALSE,
@@ -65,13 +66,12 @@ if (!class_exists('Ocean_Extra_MailChimp_Widget')) {
                 $ch     = curl_init();
                 $params = json_encode( $params );
 
-                curl_setopt( $ch, CURLOPT_URL, $root . '/lists/subscribe' . '.json' );
-
-                curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-Type: application/json',
-                    'Authorization: ' . $apikey
-                ) );
+                curl_setopt( $ch, CURLOPT_URL, $root . '/lists/' . $list_id . '/members/' . $email );
+				curl_setopt( $ch, CURLOPT_USERPWD, 'user:' . $apikey);
+				curl_setopt( $ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json'] );
                 curl_setopt( $ch, CURLOPT_RETURNTRANSFER, TRUE );
-
+                curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, 'PUT');
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt( $ch, CURLOPT_POSTFIELDS, $params );
 
                 $response_body  = curl_exec( $ch );
@@ -281,9 +281,7 @@ if (!class_exists('Ocean_Extra_MailChimp_Widget')) {
          */
         public function ocean_extra_mailchimp_js() {
             // Load only if the widget is used
-            if ( is_active_widget( '', '', 'ocean_mailchimp' ) ) {
-                wp_enqueue_script('oe-mailchimp-script', OE_URL . 'includes/widgets/js/mailchimp.min.js', array('jquery'), false, true);
-            }
+            wp_enqueue_script('oe-mailchimp-script', OE_URL . 'includes/widgets/js/mailchimp.min.js', array('jquery'), false, true);
         }
 
         /**

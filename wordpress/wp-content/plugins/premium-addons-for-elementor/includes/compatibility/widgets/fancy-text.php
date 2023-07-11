@@ -1,10 +1,15 @@
 <?php
+/**
+ * PA WPML Fancy Text.
+ */
 
 namespace PremiumAddons\Compatibility\WPML\Widgets;
 
 use WPML_Elementor_Module_With_Items;
 
-if ( ! defined('ABSPATH') ) exit; // No access of directly access
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // No access of directly access.
+}
 
 /**
  * Fancy Text
@@ -43,18 +48,22 @@ class FancyText extends WPML_Elementor_Module_With_Items {
 	 *
 	 * @since 3.1.9
 	 *
+	 * @param string $field control ID.
+	 *
 	 * @return string
 	 */
 	protected function get_title( $field ) {
-		
-        return __( 'Fancy Text: String', 'premium-addons-for-elementor' );
-		
+
+		return __( 'Fancy Text: String', 'premium-addons-for-elementor' );
+
 	}
 
 	/**
 	 * Get `editor_type` for each repeater string
 	 *
 	 * @since 3.1.9
+	 *
+	 * @param string $field control ID.
 	 *
 	 * @return string
 	 */

@@ -19,7 +19,7 @@ class OnOff extends AbstractFieldHidden {
 
     protected function fetchElement() {
 
-        $html = '<div class="n2_field_onoff' . $this->isOn() . '">' . parent::fetchElement() . '<div class="n2_field_onoff__slider"><div class="n2_field_onoff__slider_bullet"></div></div><div class="n2_field_onoff__labels"><div class="n2_field_onoff__label n2_field_onoff__label_off">' . n2_('Off') . '</div><div class="n2_field_onoff__label n2_field_onoff__label_on">' . n2_('On') . '</div></div></div>';
+        $html = '<div class="n2_field_onoff' . $this->isOn() . '" role="switch" aria-checked="false" tabindex="0" aria-label="' . $this->label . '">' . parent::fetchElement() . '<div class="n2_field_onoff__slider"><div class="n2_field_onoff__slider_bullet"></div></div><div class="n2_field_onoff__labels"><div class="n2_field_onoff__label n2_field_onoff__label_off">' . n2_('Off') . '</div><div class="n2_field_onoff__label n2_field_onoff__label_on">' . n2_('On') . '</div></div></div>';
 
         $options = array();
 
@@ -36,7 +36,7 @@ class OnOff extends AbstractFieldHidden {
             $options['relatedAttribute'] = $this->relatedAttribute;
         }
 
-        Js::addInline('new N2Classes.FormElementOnoff("' . $this->fieldID . '", ' . json_encode($options) . ');');
+        Js::addInline('new _N2.FormElementOnoff("' . $this->fieldID . '", ' . json_encode($options) . ');');
 
         return $html;
     }

@@ -13,7 +13,6 @@ use Nextend\Framework\Content\ControllerAjaxContent;
 use Nextend\Framework\Font\ControllerAjaxFont;
 use Nextend\Framework\Image\ControllerAjaxImage;
 use Nextend\Framework\Image\Image;
-use Nextend\Framework\Localization\Localization;
 use Nextend\Framework\Platform\Platform;
 use Nextend\Framework\Router\Router;
 use Nextend\Framework\Style\ControllerAjaxStyle;
@@ -34,6 +33,7 @@ use Nextend\SmartSlider3\Application\Admin\Slides\ControllerSlides;
 use Nextend\SmartSlider3\Application\Admin\Update\ControllerUpdate;
 use Nextend\SmartSlider3\Application\Admin\Visuals\ControllerAjaxCss;
 use Nextend\SmartSlider3\BackgroundAnimation\ControllerAjaxBackgroundAnimation;
+use Nextend\SmartSlider3\Platform\Joomla\JoomlaShim;
 use Nextend\SmartSlider3\Platform\SmartSlider3Platform;
 use Nextend\SmartSlider3\SmartSlider3Info;
 
@@ -175,16 +175,15 @@ class ApplicationTypeAdmin extends AbstractApplicationType {
 
     public function enqueueAssets() {
 
-        Js::addInline('N2Classes.AjaxHelper.addAdminUrl(' . json_encode($this->getKey()) . ', ' . json_encode($this->createAjaxUrl('/')) . ');');
+        Js::addInline('_N2.AjaxHelper.addAdminUrl(' . json_encode($this->getKey()) . ', ' . json_encode($this->createAjaxUrl('/')) . ');');
 
 
-        JS::addInline('N2Classes.BrowserCompatibility(' . json_encode($this->getUrlHelpBrowserIncompatible()) . ');');
+        JS::addInline('_N2.BrowserCompatibility(' . json_encode($this->getUrlHelpBrowserIncompatible()) . ');');
 
         parent::enqueueAssets();
         if (Platform::isAdmin()) {
             Js::addGlobalInline('window.N2SS3C="' . SmartSlider3Info::$campaign . '";');
         }
-    
 
         Image::enqueueHelper();
 

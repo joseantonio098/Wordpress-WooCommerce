@@ -2,7 +2,9 @@
 /**
  * The Template for displaying social buttons.
  *
- * @version             1.17.0
+ * This template can be overridden by copying it to yourtheme/woocommerce/ti-wishlist-social.php.
+ *
+ * @version             1.21.5
  * @package           TInvWishlist\Template
  */
 
@@ -13,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="social-buttons">
 	<?php if ( ! empty( $share_on ) ) : ?>
-		<span><?php echo esc_html( $share_on ) ?></span>
+		<span><?php echo wp_kses_post( $share_on ) ?></span>
 	<?php endif; ?>
 	<ul>
 		<?php foreach ( $social as $social_name => $social_url ) {

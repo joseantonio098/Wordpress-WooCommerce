@@ -4,7 +4,6 @@
 namespace Nextend\SmartSlider3\Application\Admin\Slides;
 
 
-use Nextend\Framework\Localization\Localization;
 use Nextend\Framework\Request\Request;
 use Nextend\Framework\Sanitize;
 use Nextend\Framework\View\AbstractView;
@@ -79,15 +78,17 @@ class ViewSlidesEdit extends AbstractView {
 
     public function display() {
 
+        $locale = setlocale(LC_NUMERIC, 0);
+        setlocale(LC_NUMERIC, "C");
+
         $this->layout = new LayoutEditor($this);
 
         $this->editorOverlay = new BlockEditorOverlay($this);
         $this->layout->setEditorOverlay($this->editorOverlay);
 
-        $this->frontendSlider                           = new AdminSlider($this->MVCHelper, Request::$GET->getInt('sliderid'), array(
+        $this->frontendSlider = new AdminSlider($this->MVCHelper, Request::$GET->getInt('sliderid'), array(
             'disableResponsive' => true
         ));
-        $this->frontendSlider->exposeSlideData['title'] = true;
         $this->frontendSlider->setEditedSlideID($this->getSlideID());
         $this->frontendSlider->initSlider();
         $this->frontendSlider->initSlides();
@@ -100,8 +101,7 @@ class ViewSlidesEdit extends AbstractView {
         $this->editorOverlay->setContentLayerWindow($layerWindowBlock->toHTML());
 
         $this->frontendSlider->initAll();
-        $this->frontendSlider->addScript('new N2Classes.DeviceChanger(this);');
-        $this->frontendSlider->addScript('new N2Classes.TallSlideDetector(this);');
+        $this->frontendSlider->addScript('new _N2.DeviceChanger(this);');
         $this->renderedSlider = $this->frontendSlider->render();
 
         $this->formManager = new FormManagerSlide($this, $this->groupID, $this->frontendSlider, $this->slide);
@@ -139,6 +139,8 @@ class ViewSlidesEdit extends AbstractView {
         $this->layout->addContent($this->render('Edit'));
 
         $this->renderLayout();
+
+        setlocale(LC_NUMERIC, $locale);
     }
 
     protected function renderLayout() {

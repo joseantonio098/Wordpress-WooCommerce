@@ -3,7 +3,7 @@
 Plugin Name: myStickymenu
 Plugin URI: https://premio.io/
 Description: Simple sticky (fixed on top) menu implementation for navigation menu and Welcome bar for announcements and promotion. After install go to Settings / myStickymenu and change Sticky Class to .your_navbar_class or #your_navbar_id.
-Version: 2.4.3
+Version: 2.5.1
 Author: Premio
 Author URI: https://premio.io/downloads/mystickymenu/
 Text Domain: mystickymenu
@@ -12,11 +12,14 @@ License: GPLv2 or later
 */
 
 defined('ABSPATH') or die("Cannot access pages directly.");
-define( 'MYSTICKY_VERSION', '2.4.3' );
+define( 'MYSTICKY_VERSION', '2.5.1' );
+define('MYSTICKYMENU_URL', plugins_url('/', __FILE__));  // Define Plugin URL
+define('MYSTICKYMENU_PATH', plugin_dir_path(__FILE__));  // Define Plugin Directory Path
+
 require_once("mystickymenu-fonts.php");
 require_once("welcome-bar.php");
 
-if(is_admin()) {
+if( is_admin() ) {
     include_once 'class-review-box.php';
 }
 
@@ -39,6 +42,9 @@ class MyStickyMenuBackend
 		add_action("wp_ajax_sticky_menu_update_status", array($this, 'sticky_menu_update_status'));
 
         add_action("wp_ajax_mystickymenu_update_popup_status", array($this, 'mystickymenu_popup_status'));
+		
+		add_action( 'admin_footer', array( $this, 'mystickymenu_deactivate' ) );
+		add_action( 'wp_ajax_mystickymenu_plugin_deactivate', array( $this, 'mystickymenu_plugin_deactivate' ) );
     }
 
     public function mystickymenu_popup_status() {
@@ -59,7 +65,7 @@ class MyStickyMenuBackend
                 $handle = curl_init();
                 curl_setopt($handle, CURLOPT_URL, $url);
                 curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
-                $response = curl_exec($handle);
+                $response = curl_exec($handle);				
                 curl_close($handle);
             }
         }
@@ -68,8 +74,8 @@ class MyStickyMenuBackend
     }
 
 	public function mystickymenu_settings_link($links){
-		$settings_link = '<a href="admin.php?page=my-stickymenu-settings">Settings</a>';
-		$links['go_pro'] = '<a href="'.admin_url("admin.php?page=my-stickymenu-settings&type=upgrade").'" style="color: #FF5983;font-weight: bold;">'.__( 'Upgrade', 'stars-testimonials' ).'</a>';
+		$settings_link = '<a href="admin.php?page=my-stickymenu-welcomebar">Settings</a>';
+		$links['go_pro'] = '<a href="'.admin_url("admin.php?page=my-stickymenu-upgrade&type=upgrade").'" style="color: #FF5983; font-weight: bold; display: inline-block; border: solid 1px #FF5983; border-radius: 4px; padding: 0 5px;">'.__( 'Upgrade', 'stars-testimonials' ).'</a>';
 		array_unshift($links, $settings_link);
 		return $links;
 	}
@@ -84,14 +90,14 @@ class MyStickyMenuBackend
             if($option === false) {
                 add_option("mystickymenu_intro_box", "show");
             }
-			wp_redirect( admin_url( 'admin.php?page=my-stickymenu-settings' ) ) ;
+			wp_redirect( admin_url( 'admin.php?page=my-stickymenu-welcomebar' ) ) ;
 			exit;
 		}
 	}
 
     public function mysticky_admin_script($hook) {
 		
-		if ( $hook != 'toplevel_page_my-stickymenu-settings' && $hook != 'mystickymenu_page_my-stickymenu-welcomebar' && $hook != 'mystickymenu_page_my-stickymenu-upgrade' ) {
+		if ( !isset($_GET['page']) || ( isset($_GET['page']) && $_GET['page'] != 'my-stickymenu-settings' && $_GET['page'] != 'my-stickymenu-welcomebar' && $_GET['page'] != 'my-stickymenu-new-welcomebar' && $_GET['page'] != 'my-stickymenu-upgrade' && $_GET['page'] != 'msm-recommended-plugins' )) {
 			return;
 		}
 
@@ -109,9 +115,8 @@ class MyStickyMenuBackend
 
         if($hook == "mystickymenu_page_my-stickymenu-upgrade") {
             wp_enqueue_script( 'my-select2', plugins_url('js/select2.min.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
-            
-
             wp_enqueue_style('my-css-select2', plugins_url('css/select2.min.css', __FILE__), array(), MYSTICKY_VERSION );
+            wp_enqueue_style('my-css-admin-settings', plugins_url('css/admin-setting.css', __FILE__), array(), MYSTICKY_VERSION );
         }
 
 		wp_enqueue_script('mystickymenuAdminScript', plugins_url('/js/mystickymenu-admin.js', __FILE__), array( 'jquery', 'jquery-ui-slider' ), MYSTICKY_VERSION);
@@ -128,32 +133,58 @@ class MyStickyMenuBackend
 	}
 
 	public function add_plugin_page(){
+		if ( isset($_GET['hide_msmrecommended_plugin']) && $_GET['hide_msmrecommended_plugin'] == 1) {
+			update_option('hide_msmrecommended_plugin',true);				
+		}
+		$hide_msmrecommended_plugin = get_option('hide_msmrecommended_plugin');
 		// This page will be under "Settings"
 		add_menu_page(
 			'Settings Admin',
 			'myStickymenu',
 			'manage_options',
-			'my-stickymenu-settings',
-			array( $this, 'create_admin_page' )
+			'my-stickymenu-welcomebar',
+			array( $this, 'mystickystickymenu_admin_welcomebar_page' )
 		);
 		add_submenu_page(
-			'my-stickymenu-settings',
-			'Settings Admin',
-			'Settings',
-			'manage_options',
-			'my-stickymenu-settings',
-			array( $this, 'create_admin_page' )
-		);
-		add_submenu_page(
-			'my-stickymenu-settings',
+			'my-stickymenu-welcomebar',
 			'Settings Admin',
 			'Welcome Bar',
 			'manage_options',
 			'my-stickymenu-welcomebar',
 			array( $this, 'mystickystickymenu_admin_welcomebar_page' )
 		);
+		
 		add_submenu_page(
+			'my-stickymenu-welcomebar',
+			'Settings Admin',
+			'+ Create New Welcome Bar',
+			'manage_options',
+			'my-stickymenu-new-welcomebar',				
+			array( $this, 'mystickystickymenu_admin_new_welcomebar_page' )
+		);
+		
+		add_submenu_page(
+			'my-stickymenu-welcomebar',
+			'Settings Admin',
+			'Sticky menu settings',
+			'manage_options',
 			'my-stickymenu-settings',
+			array( $this, 'create_admin_page' )
+		);
+		
+		
+		if ( !$hide_msmrecommended_plugin){
+			add_submenu_page(
+				'my-stickymenu-welcomebar',
+				'msm-recommended-plugins',
+				'Recommended Plugins',
+				'manage_options',
+				'msm-recommended-plugins',
+				array( $this, 'mystickymenu_recommended_plugins' )
+			);
+		}
+		add_submenu_page(
+			'my-stickymenu-welcomebar',
 			'Upgrade to Pro',
 			'Upgrade to Pro',
 			'manage_options',
@@ -176,6 +207,7 @@ class MyStickyMenuBackend
 				$post['device_desktop'] = 'on';
 				$post['device_mobile'] = 'on';
 				update_option( 'mysticky_option_name', $post);
+				$this->mysticky_clear_all_caches();
 				echo '<div class="updated settings-error notice is-dismissible "><p><strong>' . esc_html__('Settings saved.','mystickymenu'). '</p></strong></div>';
 			} else {
 				wp_verify_nonce($_GET['nonce'], 'wporg_frontend_delete');
@@ -190,24 +222,10 @@ class MyStickyMenuBackend
         $pro_url = "https://go.premio.io/?edd_action=add_to_cart&download_id=2199&edd_options[price_id]=";
 		
         $is_shown = get_option("mystickymenu_update_message");
-        if($is_shown == 1) {?>
-            <div class="updates-form-form" >
-                <div class="popup-form-content">
-                    <div id="add-update-folder-title" class="add-update-folder-title">
-                        Would you like to get feature updates for myStickymenu in real-time?
-                    </div>
-                    <div class="folder-form-input">
-                        <input id="myStickymenu_update_email" autocomplete="off" value="<?php echo get_option( 'admin_email' ) ?>" placeholder="Email address">
-                    </div>
-                    <div class="updates-content-buttons">
-                        <button href="javascript:;" class="button button-primary form-submit-btn yes">Yes, I want</button>
-                        <button href="javascript:;" class="button button-secondary form-cancel-btn no">Skip</button>
-                        <div style="clear: both"></div>
-                    </div>
-                    <input type="hidden" id="myStickymenu_update_nonce" value="<?php echo wp_create_nonce("myStickymenu_update_nonce") ?>">
-                </div>
-            </div>
-        <?php } else {
+        if($is_shown == 1) {
+			
+			include_once MYSTICKYMENU_PATH . '/update.php';
+		} else {
 
             $option = get_option("mystickymenu_intro_box");
             if($option == "show") {
@@ -229,8 +247,9 @@ class MyStickyMenuBackend
 		<div id="mystickymenu" class="wrap mystickymenu">
 			<div class="sticky-header-menu">
 				<ul>
-					<li><a href="<?php echo admin_url( 'admin.php?page=my-stickymenu-settings' ) ?>" class="active" ><?php _e('Sticky Menu', 'mystickymenu'); ?></a></li>
 					<li><a href="<?php echo admin_url( 'admin.php?page=my-stickymenu-welcomebar' ) ?>" ><?php _e('Welcome Bar', 'mystickymenu'); ?></a></li>
+					<li><a href="<?php echo admin_url( 'admin.php?page=my-stickymenu-settings' ) ?>" class="active" ><?php _e('Sticky Menu', 'mystickymenu'); ?></a></li>
+					
 					<li><a href="<?php echo admin_url( 'admin.php?page=my-stickymenu-upgrade' ) ?>"><?php _e('Upgrade to Pro', 'mystickymenu'); ?></a></li>
 				</ul>
 			</div>
@@ -294,13 +313,18 @@ class MyStickyMenuBackend
 								</select>
 
 								<input type="text" size="18" id="mysticky_class_selector" class="mystickyinput" name="mysticky_option_name[mysticky_class_selector]" value="<?php echo $mysticky_options['mysticky_class_selector'];?>"  />
-
-								<p class="description"><?php _e("menu or header element class or id.", 'mystickymenu')?></p>
+								
+								<p class="description mystuckymenu-class-id">
+									<span class="dashicons dashicons-info"></span>&nbsp;
+									<span>
+									<?php echo sprintf(__('Need help finding your ID/Class? Install <a href="%s" target="_blank">CSS Peeper</a> to quickly get your navigation menu ID/Class. Here\'s a quick <a href="%s" target="_blank">video <span class="dashicons dashicons-controls-play"></span></a> of how you can do it.', 'mystickymenu'), 'https://chrome.google.com/webstore/detail/css-peeper/mbnbehikldjhnfehhnaidhjhoofhpehk?hl=en', 'https://www.youtube.com/watch?v=uuNqSkBPnLU');?>	
+									</span>
+								</p>
 							</td>
 							<td>
 								<div class="mysticky_device_upgrade">
 									<label class="mysticky_title"><?php _e("Devices", 'mystickymenu')?></label>
-									<span class="myStickymenu-upgrade"><a class="sticky-header-upgrade-now" href="<?php echo esc_url($upgarde_url); ?>" target="_blank"><?php _e( 'Upgrade Now', 'mystickymenu' );?></a></span>
+									<span class="myStickymenu-upgrade"><a class="sticky-header-upgrade" href="<?php echo esc_url($upgarde_url); ?>" target="_blank"><?php _e( 'Upgrade Now', 'mystickymenu' );?></a></span>
 									
 									<ul class="mystickymenu-input-multicheckbox">
 										<li>
@@ -423,7 +447,7 @@ class MyStickyMenuBackend
 
 					<div class="mystickymenu-content-option">
 						<label class="mysticky_title css-style-title"><?php _e("Hide on Scroll Down", 'mystickymenu'); ?></label>
-						<?php if(!$is_old) { ?><span class="myStickymenu-upgrade"><a class="sticky-header-upgrade-now" href="<?php echo esc_url($upgarde_url); ?>" target="_blank"><?php _e( 'Upgrade Now', 'mystickymenu' );?></a></span><?php } ?>
+						<?php if(!$is_old) { ?><span class="myStickymenu-upgrade"><a class="sticky-header-upgrade" href="<?php echo esc_url($upgarde_url); ?>" target="_blank"><?php _e( 'Upgrade Now', 'mystickymenu' );?></a></span><?php } ?>
 						<p>
 						<label class="mysticky_text">
 							<input id="myfixed_disable_scroll_down" name="mysticky_option_name[myfixed_disable_scroll_down]" type="checkbox" <?php checked( @$mysticky_options['myfixed_disable_scroll_down'], 'on' );?> <?php echo !$is_old?"disabled":"" ?> />
@@ -483,20 +507,20 @@ class MyStickyMenuBackend
 									}
 									?>
 								</div>
-								<a href="javascript:void(0);" class="create-rule" id="mysticky_create-rule"><?php esc_html_e( "Add Rule", "mystickyelements" );?></a>
+								<a href="javascript:void(0);" class="create-rule" id="mysticky_create-rule"><?php esc_html_e( "Add Rule", "mystickymenu" );?></a>
 							</div>
 							<input type="hidden" id="mysticky_welcomebar_site_url" value="<?php echo site_url("/") ?>" />
 							<div class="mysticky-page-options-html" style="display: none;">
 								<div class="mysticky-page-option">
 									<div class="url-content">
 										<div class="mysticky-welcomebar-url-select">
-											<select name="mysticky_option_name[mysticky_page_settings][__count__][shown_on]" id="url_shown_on___count___option" <?php echo !$is_pro_active?"disabled":"" ?>>
+											<select name="" id="url_shown_on___count___option">
 												<option value="show_on"><?php esc_html_e("Show on", "mysticky" );?></option>
 												<option value="not_show_on"><?php esc_html_e("Don't show on", "mysticky" );?></option>
 											</select>
 										</div>
 										<div class="mysticky-welcomebar-url-option">
-											<select class="mysticky-url-options" name="mysticky_option_name[mysticky_page_settings][__count__][option]" id="url_rules___count___option" <?php echo !$is_pro_active?"disabled":"" ?>>
+											<select class="mysticky-url-options" name="" id="url_rules___count___option">
 												<option selected="selected" disabled value=""><?php esc_html_e("Select Rule", "mysticky" );?></option>
 												<?php foreach($url_options as $key=>$value) {
 													echo '<option value="'.$key.'">'.$value.'</option>';
@@ -507,14 +531,11 @@ class MyStickyMenuBackend
 											<span class='mysticky-welcomebar-url'><?php echo site_url("/"); ?></span>
 										</div>
 										<div class="mysticky-welcomebar-url-values">
-											<input type="text" value="" name="mysticky_option_name[mysticky_page_settings][__count__][value]" id="url_rules___count___value" <?php echo !$is_pro_active?"disabled":"" ?> />
-										</div>
-										<div class="mysticky-welcomebar-url-buttons">
-											<a class="mysticky-remove-rule" href="javascript:void(0);">x</a>
+											<input type="text" value="" name="mysticky_option_name[mysticky_page_settings][__count__][value]" id="url_rules___count___value" disabled />
 										</div>
 										<div class="clear"></div>
 									</div>
-									<?php if(!$is_old) { ?><span class="myStickymenu-upgrade"><a class="sticky-header-upgrade-now" href="<?php echo esc_url($upgarde_url); ?>" target="_blank"><?php _e( 'Upgrade Now', 'mystickymenu' );?></a></span><?php } ?>
+									<span class="myStickymenu-upgrade"><a class="sticky-header-upgrade" href="<?php echo esc_url($upgarde_url); ?>" target="_blank"><?php _e( 'Upgrade Now', 'mystickymenu' );?></a></span>
 								</div>
 							</div>
 						</div>
@@ -549,7 +570,7 @@ class MyStickyMenuBackend
 
 					<div class="mystickymenu-content-option">
 						<label class="mysticky_title"><?php _e("Disable at", 'mystickymenu'); ?></label>
-						<?php if(!$is_old) { ?><span class="myStickymenu-upgrade"><a class="sticky-header-upgrade-now" href="<?php echo esc_url($upgarde_url); ?>" target="_blank"><?php _e( 'Upgrade Now', 'mystickymenu' );?></a></span><?php } ?>
+						<?php if(!$is_old) { ?><span class="myStickymenu-upgrade"><a class="sticky-header-upgrade" href="<?php echo esc_url($upgarde_url); ?>" target="_blank"><?php _e( 'Upgrade Now', 'mystickymenu' );?></a></span><?php } ?>
 						<div class="mystickymenu-input-section">
 							<ul class="mystickymenu-input-multicheckbox">
 								<li>
@@ -658,7 +679,23 @@ class MyStickyMenuBackend
         </div>
         <?php }
 	}
+	public function mystickystickymenu_admin_new_welcomebar_page() {		
+		?>
+		<div id="mystickymenu" class="wrap mystickymenu mystickymenu-new-widget-wrap">		 
+			<?php include_once dirname(__FILE__) . '/mystickymeny-new-welcomebar.php';?>
+		</div>
+		<?php
+	}
+	
 	public function mystickystickymenu_admin_welcomebar_page() {
+		
+		 $is_shown = get_option("mystickymenu_update_message");
+        if($is_shown == 1) {
+			
+			include_once MYSTICKYMENU_PATH . '/update.php';
+			return;
+		} 
+		
 		/* welcome bar save data  */
 		if (isset($_POST['mysticky_option_welcomebar']) && !empty($_POST['mysticky_option_welcomebar']) && isset($_POST['nonce'])) {
 			if(!empty($_POST['nonce']) && wp_verify_nonce($_POST['nonce'], 'mysticky_option_welcomebar_update')) {						
@@ -672,6 +709,7 @@ class MyStickyMenuBackend
 				$mysticky_option_welcomebar['mysticky_welcomebar_expirydate'] = '';
 				$mysticky_option_welcomebar['mysticky_welcomebar_page_settings'] = '';
 				update_option( 'mysticky_option_welcomebar', $mysticky_option_welcomebar);
+				$this->mysticky_clear_all_caches();
 				echo '<div class="updated settings-error notice is-dismissible "><p><strong>' . esc_html__('Settings saved.','mystickymenu'). '</p></strong></div>';
 			} else {
 				wp_verify_nonce($_GET['nonce'], 'wporg_frontend_delete');
@@ -682,6 +720,7 @@ class MyStickyMenuBackend
 			if(!empty($_POST['nonce_reset']) && wp_verify_nonce($_POST['nonce_reset'], 'mysticky_option_welcomebar_reset')) {	
 				$mysticky_option_welcomebar_reset = mysticky_welcomebar_pro_widget_default_fields();				
 				update_option( 'mysticky_option_welcomebar', $mysticky_option_welcomebar_reset);
+				$this->mysticky_clear_all_caches();
 				echo '<div class="updated settings-error notice is-dismissible "><p><strong>' . esc_html__('Reset Settings saved.','mystickymenu'). '</p></strong></div>';
 			} else {
 				wp_verify_nonce($_GET['nonce'], 'wporg_frontend_delete');
@@ -711,8 +750,8 @@ class MyStickyMenuBackend
 		<div id="mystickymenu" class="wrap mystickymenu">
 			<div class="sticky-header-menu">
 				<ul>
-					<li><a href="<?php echo admin_url( 'admin.php?page=my-stickymenu-settings' ) ?>"><?php _e('Sticky Menu', 'mystickymenu'); ?></a></li>
 					<li><a href="<?php echo admin_url( 'admin.php?page=my-stickymenu-welcomebar' ) ?>" class="active" ><?php _e('Welcome Bar', 'mystickymenu'); ?></a></li>
+					<li><a href="<?php echo admin_url( 'admin.php?page=my-stickymenu-settings' ) ?>"><?php _e('Sticky Menu', 'mystickymenu'); ?></a></li>					
 					<li><a href="<?php echo admin_url( 'admin.php?page=my-stickymenu-upgrade' ) ?>"><?php _e('Upgrade to Pro', 'mystickymenu'); ?></a></li>
 				</ul>
 			</div>
@@ -721,6 +760,9 @@ class MyStickyMenuBackend
 			</div>
 		</div>
 		<?php
+	}
+	public function mystickymenu_recommended_plugins() {
+		include_once 'recommended-plugins.php';
 	}
 	public function mystickymenu_admin_upgrade_to_pro() {
         $pro_url = "https://go.premio.io/checkount/?edd_action=add_to_cart&download_id=2199&edd_options[price_id]=";
@@ -740,145 +782,14 @@ class MyStickyMenuBackend
 		<div id="mystickymenu" class="wrap mystickymenu">
 			<div class="sticky-header-menu">
 				<ul>
-					<li><a href="<?php echo admin_url( 'admin.php?page=my-stickymenu-settings' ) ?>"><?php _e('Sticky Menu', 'mystickymenu'); ?></a></li>
 					<li><a href="<?php echo admin_url( 'admin.php?page=my-stickymenu-welcomebar' ) ?>" ><?php _e('Welcome Bar', 'mystickymenu'); ?></a></li>
+					<li><a href="<?php echo admin_url( 'admin.php?page=my-stickymenu-settings' ) ?>"><?php _e('Sticky Menu', 'mystickymenu'); ?></a></li>					
 					<li><a href="<?php echo admin_url( 'admin.php?page=my-stickymenu-upgrade' ) ?>" class="active" ><?php _e('Upgrade to Pro', 'mystickymenu'); ?></a></li>
 				</ul>
 			</div>
-			<div id="sticky-header-upgrade" class="sticky-header-content">
-					<div id="rpt_pricr" class="rpt_plans rpt_3_plans  rpt_style_basic">
-						<p class="udner-title">
-							<strong class="text-primary">Unlock All Features</strong>
-						</p>
-						<div class="">
-							<div class="rpt_plan  rpt_plan_0  ">
-								<div style="text-align:left;" class="rpt_title rpt_title_0">Basic</div>
-								<div class="rpt_head rpt_head_0">
-									<div class="rpt_recurrence rpt_recurrence_0">For small website owners</div>
-									<div class="rpt_price rpt_price_0">$19</div>
-									<div class="rpt_description rpt_description_0 rpt_desc">Per year. Renewals for 25% off</div>
-									<div style="clear:both;"></div>
-								</div>
-								<div class="rpt_features rpt_features_0">
-									<div style="padding: 12px 16px 6px 16px" class="rpt_feature rpt_feature_0-0"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>Use myStickymenu on 1 domain</span>1 website<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_0-1"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>You can show the menu when scrolling up, down or both</span>Show on scroll up/down<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_0-2"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>You can disable the sticky effect on desktop or mobile</span>Devices<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_0-3"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>Add CSS of your own to the sticky menu</span>CSS style<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_0-4"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>Show/hide the sticky menu on specific pages</span>Page targeting<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_0-5"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>Fade/Slide, opacity, background color, transition time and more</span>Effects and more<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_0-6"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>Including page targeting, delay and scroll triggers, devices, position, height, expiry date, open link in a new tab</span>Welcome bar<span class="rpt_tooltip_plus"> +</span></a></div>
-									<div class="rpt_feature rpt_feature_0-9">
-										<select data-key="0" class="multiple-options">
-											<option data-header="Renewals for 25% off" data-price="19" value="<?php echo esc_url($pro_url."1") ?>">
-												<?php esc_html_e("Updates & support for 1 year") ?>
-											</option>
-											<option data-header="For 2 years" data-price="29" value="<?php echo esc_url($pro_url."13") ?>">
-												<?php esc_html_e("Updates & support for 2 years") ?>
-											</option>
-											<option data-header="For lifetime" data-price="59" value="<?php echo esc_url($pro_url."5") ?>">
-												<?php esc_html_e("Updates & support for lifetime") ?>
-											</option>
-										</select>
-									</div>
-								</div>
-								<div style="clear:both;"></div>
-								<a target="_blank" href="https://go.premio.io/?edd_action=add_to_cart&amp;download_id=2199&amp;edd_options[price_id]=1" class="rpt_foot rpt_foot_0">Buy now</a>
-							</div>
-							<div class="rpt_plan  rpt_plan_1 rpt_recommended_plan ">
-								<div style="text-align:left;" class="rpt_title rpt_title_1">Plus<img class="rpt_recommended" src="<?php echo plugins_url("") ?>/mystickymenu/images/rpt_recommended.png" style="top: 27px;"></div>
-								<div class="rpt_head rpt_head_1">
-									<div class="rpt_recurrence rpt_recurrence_1">For businesses with multiple websites</div>
-									<div class="rpt_price rpt_price_1">$39</div>
-									<div class="rpt_description rpt_description_1 rpt_desc">Per year. Renewals for 25% off</div>
-									<div style="clear:both;"></div>
-								</div>
-								<div class="rpt_features rpt_features_1">
-									<div style="padding: 12px 16px 6px 16px" class="rpt_feature rpt_feature_1-0"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>Use myStickymenu on 5 domains</span>5 websites<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_1-1"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>You can show the menu when scrolling up, down or both</span>Show on scroll up/down<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_1-2"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>You can disable the sticky effect on desktop or mobile</span>Devices<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_1-3"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>Add CSS of your own to the sticky menu</span>CSS style<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_1-4"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>Show/hide the sticky menu on specific pages</span>Page targeting<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_1-5"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>Fade/Slide, opacity, background color, transition time and more</span>Effects and more<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_1-6"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>Including page targeting, delay and scroll triggers, devices, position, height, expiry date, open link in a new tab</span>Welcome bar<span class="rpt_tooltip_plus"> +</span></a></div>
-									<div class="rpt_feature rpt_feature_0-9">
-										<select data-key="0" class="multiple-options">
-											<option data-header="Renewals for 25% off" data-price="39" value="<?php echo esc_url($pro_url."2") ?>">
-												<?php esc_html_e("Updates & support for 1 year") ?>
-											</option>
-											<option data-header="For 2 years" data-price="59" value="<?php echo esc_url($pro_url."14") ?>">
-												<?php esc_html_e("Updates & support for 2 years") ?>
-											</option>
-											<option data-header="For lifetime" data-price="99" value="<?php echo esc_url($pro_url."7") ?>">
-												<?php esc_html_e("Updates & support for lifetime") ?>
-											</option>
-										</select>
-									</div>
-								</div>
-								<div style="clear:both;"></div>
-								<a target="_blank" href="https://go.premio.io/?edd_action=add_to_cart&amp;download_id=2199&amp;edd_options[price_id]=2" class="rpt_foot rpt_foot_1">Buy now</a>
-							</div>
-							<div class="rpt_plan  rpt_plan_2  ">
-								<div style="text-align:left;" class="rpt_title rpt_title_2">Agency</div>
-								<div class="rpt_head rpt_head_2">
-									<div class="rpt_recurrence rpt_recurrence_2">For agencies who manage clients</div>
-									<div class="rpt_price rpt_price_2">$79</div>
-									<div class="rpt_description rpt_description_2 rpt_desc">Per year. Renewals for 25% off</div>
-									<div style="clear:both;"></div>
-								</div>
-								<div class="rpt_features rpt_features_2">
-									<div class="rpt_feature rpt_feature_2-0"><a href="javascript:;" class="rpt_tooltip">
-                                        <select class="multiple-web-options">
-                                            <option value="50_websites">50 websites</option>
-                                            <option value="500_websites">500 websites</option>
-                                            <option value="1000_websites">1000 websites</option>
-                                        </select>
-                                    </div>
-									<div class="rpt_feature rpt_feature_2-1"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>You can show the menu when scrolling up, down or both</span>Show on scroll up/down<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_2-2"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>You can disable the sticky effect on desktop or mobile</span>Devices<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_2-3"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>Add CSS of your own to the sticky menu</span>CSS style<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_2-4"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>Show/hide the sticky menu on specific pages</span>Page targeting<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_2-5"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>Fade/Slide, opacity, background color, transition time and more</span>Effects and more<span class="rpt_tooltip_plus" > +</span></a></div>
-									<div class="rpt_feature rpt_feature_2-6"><a href="javascript:;" class="rpt_tooltip"><span class="intool"><b></b>Including page targeting, delay and scroll triggers, devices, position, height, expiry date, open link in a new tab</span>Welcome bar<span class="rpt_tooltip_plus"> +</span></a></div>
-									<div class="rpt_feature rpt_feature_0-9">
-										<select data-key="0" class="multiple-options has-multiple-websites">
-											<option data-option="1_year" data-header="Renewals for 25% off" data-price="79" value="<?php echo esc_url($pro_url."3") ?>">
-												<?php esc_html_e("Updates & support for 1 year") ?>
-											</option>
-											<option data-option="2_year" data-header="For 2 years" data-price="125" value="<?php echo esc_url($pro_url."15") ?>">
-												<?php esc_html_e("Updates & support for 2 years") ?>
-											</option>
-											<option data-option="lifetime" data-header="For lifetime" data-price="199" value="<?php echo esc_url($pro_url."9") ?>">
-												<?php esc_html_e("Updates & support for lifetime") ?>
-											</option>
-										</select>
-									</div>
-								</div>
-								<div style="clear:both;"></div>
-								<a target="_blank" href="https://go.premio.io/?edd_action=add_to_cart&amp;download_id=2199&amp;edd_options[price_id]=3" class="rpt_foot rpt_foot_2">Buy now</a>
-							</div>
-						</div>
-						<div style="clear:both;"></div>
-						<div class="client-testimonial">
-							<p class="text-center"><span class="dashicons dashicons-yes"></span> 30 days money back guaranteed</p>
-							<p class="text-center"><span class="dashicons dashicons-yes"></span> The plugin will always keep working even if you don't renew your license</p>
-							<div class="payment">
-								<img src="<?php echo plugins_url("") ?>/mystickymenu/images/payment.png" alt="Payment" class="payment-img" />
-							</div>
-							<div class="testimonial-box">
-								<div class="testimonial-image">
-									<img src="<?php echo plugins_url("") ?>/mystickymenu/images/testimonial.png" style="top: 27px;">
-								</div>
-								<div class="testimonial-content">
-									This plugin does exactly what it should. It is simple but powerful. I would suggest to anyone who wants to make their menu sticky! I especially love the hide header on scroll down, show on scroll up feature that is built it. Great work!
-									<div class="author">Clayton Chase</div>
-								</div>
-								<div style="clear:both;"></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<?php
+			<?php include_once "upgrade-to-pro.php"; ?>
+        </div>
+        <?php
 	}
 		
 	public function mysticky_default_options() {
@@ -1001,6 +912,175 @@ class MyStickyMenuBackend
 			update_option( 'update_mysticky_version_2_6', true );
 		}
 	}
+	
+	/*
+	 * clear cache when any option is updated
+	 *
+	 */
+	public function mysticky_clear_all_caches(){
+
+		try {
+			global $wp_fastest_cache;
+
+			// if W3 Total Cache is being used, clear the cache
+			if (function_exists('w3tc_flush_all')) {
+				w3tc_flush_all();
+			}
+			/* if WP Super Cache is being used, clear the cache */
+			if (function_exists('wp_cache_clean_cache')) {
+				global $file_prefix, $supercachedir;
+				if (empty($supercachedir) && function_exists('get_supercache_dir')) {
+					$supercachedir = get_supercache_dir();
+				}
+				wp_cache_clean_cache($file_prefix);
+			}
+
+			if (class_exists('WpeCommon')) {
+				//be extra careful, just in case 3rd party changes things on us
+				if (method_exists('WpeCommon', 'purge_memcached')) {
+					//WpeCommon::purge_memcached();
+				}
+				if (method_exists('WpeCommon', 'clear_maxcdn_cache')) {
+					//WpeCommon::clear_maxcdn_cache();
+				}
+				if (method_exists('WpeCommon', 'purge_varnish_cache')) {
+					//WpeCommon::purge_varnish_cache();
+				}
+			}
+
+			if (method_exists('WpFastestCache', 'deleteCache') && !empty($wp_fastest_cache)) {
+				$wp_fastest_cache->deleteCache();
+			}
+			if (function_exists('rocket_clean_domain')) {
+				rocket_clean_domain();
+				// Preload cache.
+				if (function_exists('run_rocket_sitemap_preload')) {
+					run_rocket_sitemap_preload();
+				}
+			}
+
+			if (class_exists("autoptimizeCache") && method_exists("autoptimizeCache", "clearall")) {
+				autoptimizeCache::clearall();
+			}
+
+			if (class_exists("LiteSpeed_Cache_API") && method_exists("autoptimizeCache", "purge_all")) {
+				LiteSpeed_Cache_API::purge_all();
+			}
+
+			if ( class_exists( '\Hummingbird\Core\Utils' ) ) {
+
+				$modules   = \Hummingbird\Core\Utils::get_active_cache_modules();
+				foreach ( $modules as $module => $name ) {
+					$mod = \Hummingbird\Core\Utils::get_module( $module );
+
+					if ( $mod->is_active() ) {
+						if ( 'minify' === $module ) {
+							$mod->clear_files();
+						} else {
+							$mod->clear_cache();
+						}
+					}
+				}
+			}
+
+		} catch (Exception $e) {
+			return 1;
+		}
+	}
+	
+	public function mystickymenu_deactivate() {
+		global $pagenow;
+
+		if ( 'plugins.php' !== $pagenow ) {
+			return;
+		}
+		include dirname(__FILE__) . "/mystickymenu-deactivate-form.php";
+	}
+	public function mystickymenu_plugin_deactivate() {
+		global $current_user;
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die(0); 
+		}
+		check_ajax_referer( 'mystickymenu_deactivate_nonce', 'nonce' );
+		
+		$postData = $_POST;
+		$errorCounter = 0;
+		$response = array();
+		$response['status'] = 0;
+		$response['message'] = "";
+		$response['valid'] = 1;
+		if(!isset($postData['reason']) || empty($postData['reason'])) {
+			$errorCounter++;
+			$response['message'] = "Please provide reason";
+		} else if(!isset($postData['reason']) || empty($postData['reason'])) {
+			$errorCounter++;
+			$response['message'] = "Please provide reason";
+		} else {
+			$nonce = $postData['nonce'];
+			if(!wp_verify_nonce($nonce, 'mystickymenu_deactivate_nonce')) {
+				$response['message'] = __("Your request is not valid", "mystickymenu");
+				$errorCounter++;
+				$response['valid'] = 0;
+			}
+		}
+		if($errorCounter == 0) {
+			global $current_user;				
+			$plugin_info = get_plugin_data( dirname(__FILE__) . "/mystickymenu.php" );
+			$postData = $_POST;
+			$email = "none@none.none";
+
+			if (isset($postData['email_id']) && !empty($postData['email_id']) && filter_var($postData['email_id'], FILTER_VALIDATE_EMAIL)) {
+				$email = $postData['email_id'];
+			}
+			$domain = site_url();
+			$user_name = $current_user->first_name . " " . $current_user->last_name;
+			$subject = "My Sticky Menu was removed from {$domain}";
+			$headers = "MIME-Version: 1.0\r\n";
+			$headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+			$headers .= 'From: ' . $user_name . ' <' . $email . '>' . PHP_EOL;
+			$headers .= 'Reply-To: ' . $user_name . ' <' . $email . '>' . PHP_EOL;
+			$headers .= 'X-Mailer: PHP/' . phpversion();
+			ob_start();
+			?>
+			<table border="0" cellspacing="0" cellpadding="5">
+				<tr>
+					<th>Plugin</th>
+					<td>My Sticky Menu</td>
+				</tr>
+				<tr>
+					<th>Plugin Version</th>
+					<td><?php echo $plugin_info['Version']; ?></td>
+				</tr>
+				<tr>
+					<th>Domain</th>
+					<td><?php echo $domain ?></td>
+				</tr>
+				<tr>
+					<th>Email</th>
+					<td><?php echo $email ?></td>
+				</tr>
+				<tr>
+					<th>Reason</th>
+					<td><?php echo nl2br($postData['reason']) ?></td>
+				</tr>
+				<tr>
+					<th>WordPress Version</th>
+					<td><?php echo get_bloginfo('version') ?></td>
+				</tr>
+				<tr>
+					<th>PHP Version</th>
+					<td><?php echo PHP_VERSION ?></td>
+				</tr>
+			</table>
+			<?php
+			$content = ob_get_clean();
+			$to = "gal@premio.io,karina@premio.io";
+			wp_mail($to, $subject, $content, $headers);
+			$response['status'] = 1;
+		}
+		echo json_encode($response);
+		wp_die();
+	}
 }
 
 
@@ -1029,6 +1109,9 @@ class MyStickyMenuFrontend
 			echo '<style id="mystickymenu" type="text/css">';
 			echo '#mysticky-nav { width:100%; position: static; }';
 			echo '#mysticky-nav.wrapfixed { position:fixed; left: 0px; margin-top:0px;  z-index: '. $mysticky_options ['myfixed_zindex'] .'; -webkit-transition: ' . $mysticky_options ['myfixed_transition_time'] . 's; -moz-transition: ' . $mysticky_options ['myfixed_transition_time'] . 's; -o-transition: ' . $mysticky_options ['myfixed_transition_time'] . 's; transition: ' . $mysticky_options ['myfixed_transition_time'] . 's; -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=' . $mysticky_options ['myfixed_opacity'] . ')"; filter: alpha(opacity=' . $mysticky_options ['myfixed_opacity'] . '); opacity:' . $mysticky_options ['myfixed_opacity'] / 100 . '; background-color: ' . $mysticky_options ['myfixed_bgcolor'] . ';}';
+			
+			echo '#mysticky-nav.wrapfixed .myfixed{ background-color: ' . $mysticky_options ['myfixed_bgcolor'] . '; position: relative;top: auto;left: auto;right: auto;}';
+			
 			if ( isset($mysticky_options ['myfixed_textcolor']) && $mysticky_options ['myfixed_textcolor'] != '' ) {
 			echo '#mysticky-nav.wrapfixed ul li.menu-item a { color: ' . $mysticky_options ['myfixed_textcolor'] . ';}';
 			}

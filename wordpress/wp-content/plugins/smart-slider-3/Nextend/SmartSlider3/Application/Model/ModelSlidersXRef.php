@@ -25,6 +25,10 @@ class ModelSlidersXRef extends AbstractModelTable {
                 'ordering'  => $this->getMaximalOrderValue($groupID)
             ));
 
+            $helper = new HelperSliderChanged($this);
+            $helper->setSliderChanged($sliderID, 1);
+            $helper->setSliderChanged($groupID, 1);
+
             SmartSlider3Info::sliderChanged();
 
             return true;
@@ -41,18 +45,21 @@ class ModelSlidersXRef extends AbstractModelTable {
     public function deleteGroup($groupID) {
         $sliders = $this->getSliders($groupID);
 
-        $this->table->deleteByAttributes(array(
-            'group_id' => $groupID
-        ));
-
         $deletedSliders = array();
 
         $slidersModel = new ModelSliders($this);
         foreach ($sliders as $slider) {
-            if ($slidersModel->trashOrDelete($slider['slider_id'], $groupID) == 'delete') {
-                $deletedSliders[] = $slider['slider_id'];
+            $relatedGroups = $this->getGroups($slider['slider_id']);
+            if (count($relatedGroups) == 1) {
+                if ($slidersModel->trashOrDelete($slider['slider_id'], $groupID) == 'delete') {
+                    $deletedSliders[] = $slider['slider_id'];
+                }
             }
         }
+
+        $this->table->deleteByAttributes(array(
+            'group_id' => $groupID
+        ));
 
         SmartSlider3Info::sliderChanged();
 
@@ -157,5 +164,38 @@ class ModelSlidersXRef extends AbstractModelTable {
         if (isset($result['ordering'])) return $result['ordering'] + 1;
 
         return 0;
+    }
+
+    /**
+     * @param $sliderID
+     *
+     * @return bool
+     */
+    public function isSliderAvailableInAnyGroups($sliderID) {
+        $allRelatedGroups = $this->getGroups($sliderID);
+
+        $slidersModel = new ModelSliders($this);
+
+        foreach ($allRelatedGroups as $group) {
+            if ($group['group_id'] != 0) {
+                /*
+                 * It is a group
+                 */
+                $sliderRow = $slidersModel->get($group['group_id']);
+                if (isset($sliderRow['status']) && $sliderRow['status'] === 'published') {
+                    return true;
+                }
+            } else {
+                /*
+                 * It is a slider
+                 */
+                $sliderRow = $slidersModel->get($sliderID);
+                if (isset($sliderRow['status']) && $sliderRow['status'] === 'published') {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

@@ -61,13 +61,8 @@ class SliderSlides extends AbstractSliderTab {
          */
         $table = new ContainerTable($this->tab, 'slides-randomize', n2_('Randomize'));
 
-        new OnOff($table->getFieldsetLabel(), 'randomize', false, 0, array(
-            'relatedFieldsOn' => array(
-                'table-rows-slides-randomize'
-            )
-        ));
-
         $row1 = $table->createRow('slides-randomize-1');
+        new OnOff($row1, 'randomize', n2_('Randomize slides'), 0);
         new OnOff($row1, 'randomizeFirst', n2_('Randomize first'), 0);
         new OnOff($row1, 'randomize-cache', n2_('Cache support'), 1);
         new Number($row1, 'variations', n2_('Cache variations'), 5, array(
@@ -118,12 +113,6 @@ class SliderSlides extends AbstractSliderTab {
 
     protected function parallax() {
 
-        $backgroundMode = $this->form->get('backgroundMode');
-        if ($backgroundMode == 'fixed') {
-            $this->form->set('backgroundMode', 'fill');
-            $this->form->set('slide-background-parallax', '1');
-            $this->form->set('slide-background-parallax-strength', 100);
-        }
 
         /**
          * Used for field removal: /slides/slides-parallax

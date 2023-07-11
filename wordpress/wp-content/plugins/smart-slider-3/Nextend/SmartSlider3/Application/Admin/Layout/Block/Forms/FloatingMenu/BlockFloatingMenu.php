@@ -43,6 +43,7 @@ class BlockFloatingMenu extends AbstractBlock {
      */
     public function setButton($button) {
 
+        $button->setTabIndex(-1);
         $button->addClass('n2_floating_menu__button n2_popover__trigger');
         $this->button = $button;
     }
@@ -123,4 +124,4 @@ class BlockFloatingMenu extends AbstractBlock {
     }
 }
 
-Js::addInline('$(".n2_floating_menu").nextendPopover();');
+Js::addInline('_N2.r(\'$\', function () {_N2.$(".n2_floating_menu").nextendPopover();});');

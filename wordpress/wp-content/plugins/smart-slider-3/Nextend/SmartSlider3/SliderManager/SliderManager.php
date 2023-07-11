@@ -7,6 +7,7 @@ use Nextend\Framework\Asset\AssetManager;
 use Nextend\Framework\Pattern\MVCHelperTrait;
 use Nextend\Framework\Translation\Translation;
 use Nextend\SmartSlider3\Application\Model\ModelSliders;
+use Nextend\SmartSlider3\Application\Model\ModelSlidersXRef;
 use Nextend\SmartSlider3\Slider\Cache\CacheSlider;
 use Nextend\SmartSlider3\Slider\Slider;
 
@@ -30,6 +31,11 @@ class SliderManager {
     public $nextCacheRefresh;
 
     /**
+     * @var ModelSlidersXRef
+     */
+    private $xref;
+
+    /**
      *
      * @param MVCHelperTrait $MVCHelper
      * @param                $sliderIDorAlias
@@ -44,8 +50,8 @@ class SliderManager {
 
         $sliderID = false;
 
+        $model = new ModelSliders($this);
         if (!is_numeric($sliderIDorAlias)) {
-            $model  = new ModelSliders($this);
             $slider = $model->getByAlias($sliderIDorAlias);
             if ($slider) {
                 $sliderID = intval($slider['id']);
@@ -56,6 +62,7 @@ class SliderManager {
 
         if ($sliderID) {
             $this->init($sliderID, $parameters);
+            $this->xref = new ModelSlidersXRef($model);
 
             AssetManager::addCachedGroup($this->slider->cacheId);
         } else {
@@ -68,7 +75,11 @@ class SliderManager {
     }
 
     public function setUsage($usage) {
-        $this->usage = $usage;
+        $this->usage           = $usage;
+
+        if ($usage === 'iframe') {
+            $this->slider->isFrame = true;
+        }
     }
 
     /**
@@ -86,7 +97,7 @@ class SliderManager {
         try {
             if (!$cache) {
                 $this->slider->initAll();
-                if ($this->slider->hasSlides() || $this->displayWhenEmpty) {
+                if (($this->xref->isSliderAvailableInAnyGroups($this->slider->sliderId) || $this->isAdmin) && ($this->slider->hasSlides() || $this->displayWhenEmpty)) {
 
                     return $this->slider->render();
                 }
@@ -104,8 +115,12 @@ class SliderManager {
         $cache = new CacheSlider($this->slider->cacheId, array(
             'slider' => $this->slider
         ));
+        $key   = 'slider' . Translation::getCurrentLocale();
+        if ($this->slider->isFrame) {
+            $key .= 'iframe';
+        }
 
-        $cachedSlider = $cache->makeCache('slider' . Translation::getCurrentLocale(), '', array(
+        $cachedSlider = $cache->makeCache($key, '', array(
             $this,
             'renderCachedSlider'
         ));
@@ -135,13 +150,13 @@ class SliderManager {
             $this->slider->initAll();
 
 
-            if ($this->slider->hasSlides()) {
+            if (($this->xref->isSliderAvailableInAnyGroups($this->slider->sliderId) || $this->isAdmin) && $this->slider->hasSlides()) {
 
                 $content['html'] = $this->slider->render();
             } else {
                 $content['html'] = '';
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $content['html'] = false;
         }
 

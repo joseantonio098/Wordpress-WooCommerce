@@ -2,6 +2,9 @@
 
 namespace Nextend\SmartSlider3\Platform\WordPress\Shortcode;
 
+use AMP_Options_Manager;
+use AMP_Theme_Support;
+use AmpProject\AmpWP\Option;
 use Nextend\Framework\Asset\Builder\BuilderJs;
 use Nextend\Framework\Localization\Localization;
 use Nextend\Framework\Request\Request;
@@ -101,13 +104,36 @@ class Shortcode {
         ), 0);
 
         /**
+         * Sometimes rest api initialized on the frontend, so we have prepare for that
+         */
+        add_action('wp', function () {
+            remove_action('rest_api_init', array(
+                self::class,
+                'shortcodeModeToNoop'
+            ), 0);
+        });
+
+        /**
          * Remove sliders from the AMP version of the site
          * @url https://wordpress.org/plugins/amp/
          */
-        add_action('pre_amp_render_post', array(
-            self::class,
-            'shortcodeModeToNoop'
-        ), 0);
+        add_action('template_redirect', function () {
+            if (function_exists('amp_is_request') && amp_is_request()) {
+                add_action('wp_head', array(
+                    self::class,
+                    'shortcodeModeToNoop'
+                ), 10001);
+
+                /**
+                 * Fix for reader mode
+                 */
+                if (class_exists('AMP_Theme_Support', false) && class_exists('AMP_Options_Manager', false)) {
+                    if (AMP_Options_Manager::get_option(Option::THEME_SUPPORT) === AMP_Theme_Support::READER_MODE_SLUG) {
+                        Shortcode::shortcodeModeToNoop();
+                    }
+                }
+            }
+        });
 
         /**
          * Remove sliders from the AMP version of the site
@@ -117,6 +143,19 @@ class Shortcode {
             self::class,
             'shortcodeModeToNoop'
         ), 0);
+
+        /**
+         * Remove sliders from the Accelerated Mobile Pages version of the site
+         * @url https://wordpress.org/plugins/accelerated-mobile-pages/
+         * The other AMP plugin has a deprecated message for the "pre_amp_render_post" action, so we need to hook this function only for Accelerated Mobile Pages plugin.
+         */
+        if (defined('AMPFORWP_VERSION')) {
+            add_action('pre_amp_render_post', array(
+                self::class,
+                'shortcodeModeToNoop'
+            ));
+        }
+
 
         add_action('after_setup_theme', function () {
             if (function_exists('KTT_share_args_for_posts')) {
@@ -183,7 +222,7 @@ class Shortcode {
 
         $attributes = array(
             'class'       => "n2-ss-slider-frame intrinsic-ignore",
-            'style'       => 'width:100%;display:block;border:0;' . (self::$disablePointer ? 'pointer-events:none;' : ''),
+            'style'       => 'width:100%;max-width:none;display:block;border:0;opacity:0;' . (self::$disablePointer ? 'pointer-events:none;' : ''),
             'frameborder' => 0,
             'src'         => site_url('/') . '?n2prerender=1&n2app=smartslider&n2controller=slider&n2action=iframe&sliderid=' . $sliderIDorAlias . '&iseditor=' . (self::$iframeReason == 'ajax' ? 0 : 1) . '&hash=' . md5($sliderIDorAlias . NONCE_SALT)
         );
@@ -291,7 +330,7 @@ class Shortcode {
                 }
 
                 if ($slideTo) {
-                    echo "<script type=\"text/javascript\">window['ss" . $parameters['slider'] . "'] = " . ($slideTo - 1) . ";</script>";
+                    echo "<script>window['ss" . $parameters['slider'] . "'] = " . ($slideTo - 1) . ";</script>";
                 }
 
                 $applicationTypeFrontend = ApplicationSmartSlider3::getInstance()

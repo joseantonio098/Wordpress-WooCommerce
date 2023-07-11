@@ -35,15 +35,11 @@ class Loader {
 		$core_class_names = array(
 			'Connect',
 			'DashboardWidget',
-			'Challenge',
-			'Education',
 			'FlyoutMenu',
-			'Builder\Education',
 			'Builder\LicenseAlert',
 			'Pages\Community',
 			'Pages\SMTP',
 			'Pages\Analytics',
-			'Settings\Education',
 			'Entries\PrintPreview',
 			'Entries\DefaultScreen',
 		);

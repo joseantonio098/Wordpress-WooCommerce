@@ -1,10 +1,10 @@
 === Ocean Extra ===
-Contributors: oceanwp, apprimit
+Contributors: oceanwp, apprimit, wpfleek
 Tags: widgets, meta box, metaboxes, metabox, oceanwp
 Requires at least: 5.3
-Tested up to: 5.4.1
-Stable tag: 1.6.3
-Requires PHP: 7.0
+Tested up to: 5.7.2
+Stable tag: 1.7.6
+Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,15 +15,15 @@ This plugin requires the [OceanWP](https://oceanwp.org/) theme to be installed.
 
 == Installation ==
 
-1. Upload `ocean-extra` to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
+1. Upload `ocean-extra` to the `/wp-content/plugins/` directory;
+2. Activate the plugin through the 'Plugins > Installed Plugins' menu in WordPress dashboard;
 3. Done!
 
 == Frequently Asked Questions ==
 
 = I installed the plugin but it does not work =
 
-This plugin will only work with the [OceanWP](https://oceanwp.org/) theme.
+This plugin will only function with the [OceanWP](https://oceanwp.org/) theme.
 
 == Screenshots ==
 
@@ -33,15 +33,80 @@ This plugin will only work with the [OceanWP](https://oceanwp.org/) theme.
 
 == Changelog ==
 
+= 1.7.6 =
+- Added: OceanWP SVG icons.
+- Added: Custom body classes in page level setting #329
+- Added: New social option in about me and social icon widget.
+- Added: New shortcode for the use of OceanWP SVG icons across website: [oceanwp_icon] - https://docs.oceanwp.org/article/779-oceanwp-icon-shortcode
+- Added: All SVG icons - https://oceanwp.org/oceanwp-svg-icons/
+- Fixed: Newsletter Widget - MailChimp failed subscription issue.
+- Fixed: Newsletter Widget - MailChimp failed subscription issue.
+
+= 1.7.5 =
+- Added: New demos
+- Fixed: Demos images missing on the setup wizard
+- Added: filter 'oe_icon_picker_image_mime_types_svg' to handle svg types.
+
+= 1.7.4 =
+- Updated: Freemius SDK version.
+- Added: New demos
+
+= 1.7.3 =
+- Added: New demos
+
+= 1.7.2 =
+- Fixed: [oceanwp_login] shortcode: logout '404 page not found' error when WooCommerce enabled.
+- Added: New shortcode to display the modified date on posts and pages: [oceanwp_last_modified]
+- Added: New demos
+
+= 1.7.1 =
+- Added: New demos
+
+= 1.7.0 =
+- Fixed: PHP 8 compatibility with demo import.
+- Added: New demo, Maria: https://maria.oceanwp.org/
+- Added: New demo, Photos: https://photos.oceanwp.org/
+- Updated: Freemius SDK version.
+
+= 1.6.9 =
+- Fixed: Demo import issue and Elementor page styling after import.
+
+= 1.6.8 =
+- Fixed: MailChimp Widget: failed subscription error.
+- Fixed: WC_Cart->taxes is deprecated since version 3.2 error when oceanwp_woo_free_shipping_left shortcode is in use.
+- Fixed: Broken demo images.
+
+= 1.6.7 =
+- Updated: Freemius SDK version.
+
+= 1.6.6 =
+- Fixed: Security issue - If $_REQUEST['_wpnonce'] is not set, it won't be checked.
+- Fixed: Remove  5-star rating filter from review link.
+- Fixed: PHP 7.4 notice - 'Trying to access array offset on value of type bool' in ocean-extra file.
+- Fixed: jQuery notice - 'ready' function has been deprecated - metabox.js file.
+- Updated: Freemius SDK version.
+
+= 1.6.5 =
+- Fixed: Data saving error - About Me widget.
+- Removed: All affiliate links have been removed.
+
+= 1.6.4 =
+- Fixed: Missing Dependencies script 'butterbean'
+- Fixed: Updated Mailchimp API
+- Added: SEO Improvement - added "noopener noreferrer" tags when link opens in a new tab: Custom Links, About Me, Social Icons, Contact Info.
+- Added: Accessibility Improvement - aria labels with warnings when link opens in a new tab: Custom Links, About Me, Social Icons, Contact Info.
+- Added: Accessibility Improvement - aria-hidden on icons for following widgets: About Me, Social Icons, Contact Info.
+- Added: Option to add a 'nofollow' link rel to following widgets: Custom Links, About Me, Social Icons, Contact Info.
+
 = 1.6.3 =
-- fixed: Uncaught ReferenceError: butterbean is not defined
-- fixed: OceanWP javascripts won't execute on fast pages
+- Fixed: Uncaught ReferenceError: butterbean is not defined
+- Fixed: OceanWP javascripts won't execute on fast pages
 
 = 1.6.2 =
-- fixed: [oceanwp_nav] error.
+- Fixed: [oceanwp_nav] error.
 
 = 1.6.1 =
-- fixed: Shortocde [oceanwp_nav] is not working.
+- Fixed: Shortocde [oceanwp_nav] is not working.
 
 = 1.6.0 =
 - Updated: Freemius SDK for better account and license management.

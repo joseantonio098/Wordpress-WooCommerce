@@ -3,12 +3,12 @@
 
 	jQuery(document).ready(function($){
 
-		$(document).on("click", ".updates-content-buttons button", function(){
+		$(document).on("click", ".updates-form button", function(){
 			var updateStatus = 0;
 			if($(this).hasClass("yes")) {
 				updateStatus = 1;
 			}
-			$(".updates-content-buttons button").attr("disabled", true);
+			$(".updates-form button").attr("disabled", true);
 			$.ajax({
 				url: ajaxurl,
 				data: "action=sticky_menu_update_status&status="+updateStatus+"&nonce="+$("#myStickymenu_update_nonce").val()+"&email="+$("#myStickymenu_update_email").val(),
@@ -107,8 +107,10 @@
 			var mysticky_welcomebar_action = $( this ).val();
 			if ( mysticky_welcomebar_action == 'redirect_to_url' ) {
 				$( '.mysticky-welcomebar-redirect' ).show();
+				$( '.mysticky-welcomebar-redirect-container' ).show();
 			} else {
 				$( '.mysticky-welcomebar-redirect' ).hide();
+				$( '.mysticky-welcomebar-redirect-container' ).hide();
 			}
 			if ( $('.mysticky-welcomebar-action option:selected').attr('data-href') !== '' && mysticky_welcomebar_action == 'thankyou_screen' ) {
 				window.open( $( '.mysticky-welcomebar-action option:selected' ).attr('data-href') , '_blank');
@@ -132,7 +134,7 @@
 	    		check_for_preview_pos();
 	    	}
 	    } );
-		jQuery(window).scroll(function(){
+		jQuery(window).on('scroll', function(){
 			if ( $( "#sticky-header-welcome-bar" ).is( ":visible" ) ) {
 	    		check_for_preview_pos();
 	    	}
@@ -307,6 +309,18 @@
 			
 		} );
 		/* DATE: 11-12-2019 End */
+		$("#myStickymenu-entry-effect").on( 'change', function() {
+			$(".mysticky-welcomebar-preview-screen .mysticky-welcomebar-fixed").removeClass('entry-effect');
+			$(".mysticky-welcomebar-fixed").removeClass (function (index, className) {
+				return (className.match (/(^|\s)mysticky-welcomebar-entry-effect-\S+/g) || []).join(' ');
+			});
+			$( '.mysticky-welcomebar-preview-screen .mysticky-welcomebar-fixed' ).addClass( 'mysticky-welcomebar-entry-effect-' + $(this).val() );
+			setTimeout( function(){
+				$(".mysticky-welcomebar-preview-screen .mysticky-welcomebar-fixed").addClass('entry-effect');
+			}, 1000 );
+
+		});
+		$( '.mysticky-welcomebar-fixed' ).addClass( 'entry-effect' );
 		
 		$( '.mysticky-welcomebar-submit input#submit' ).on( 'click', function(e){
 			if ( $( 'input[name="mysticky_option_welcomebar[mysticky_welcomebar_enable]"]' ).prop( 'checked' ) == false && $( 'input#save_welcome_bar' ).val() == '' ) {
@@ -339,7 +353,7 @@
 		} );
 
 	});
-	$( window ).load( function(){
+	$( window ).on('load', function(){
 	    $( '.mysticky-welcomebar-url-options' ).each( function(){
 	        $( this ).trigger( 'change' );
 	    });

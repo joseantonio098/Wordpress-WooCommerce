@@ -1,10 +1,15 @@
 <?php
+/**
+ * PA WPML Vertical Scroll.
+ */
 
 namespace PremiumAddons\Compatibility\WPML\Widgets;
 
 use WPML_Elementor_Module_With_Items;
 
-if ( ! defined('ABSPATH') ) exit; // No access of directly access
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // No access of directly access.
+}
 
 /**
  * Fancy Text
@@ -34,7 +39,7 @@ class Vertical_Scroll extends WPML_Elementor_Module_With_Items {
 	 */
 	public function get_fields() {
 		return array(
-			'id_repeater' => 'section_id'
+			'id_repeater' => 'section_id',
 		);
 	}
 
@@ -43,18 +48,22 @@ class Vertical_Scroll extends WPML_Elementor_Module_With_Items {
 	 *
 	 * @since 3.1.9
 	 *
+	 * @param string $field control ID.
+	 *
 	 * @return string
 	 */
 	protected function get_title( $field ) {
-		
-        return __( 'Vertical Scroll: Section ID', 'premium-addons-for-elementor' );
-		
+
+		return __( 'Vertical Scroll: Section ID', 'premium-addons-for-elementor' );
+
 	}
 
 	/**
 	 * Get `editor_type` for each repeater string
 	 *
 	 * @since 3.1.9
+	 *
+	 * @param string $field control ID.
 	 *
 	 * @return string
 	 */

@@ -6,12 +6,19 @@
 	"use strict";
 
 	$(document).ready(function($){
-
+		
+		if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && option.device_mobile != 1) {
+			return false;
+		} else if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) != true && option.device_desktop != 1 ) {
+			return false;
+		}
+		/*
 		if ( jQuery.browser.mobile && !option.device_mobile) {
 			return false;
 		} else if ( !jQuery.browser.mobile && !option.device_desktop) {
 			return false;
 		}
+		*/
 
 		// get Sticky Class setting if class name existts
 		if ($(option.mystickyClass) [0]){

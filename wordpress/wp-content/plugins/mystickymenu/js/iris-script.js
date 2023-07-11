@@ -2,9 +2,10 @@ var priceOptions = {"50_websites":{"1_year":{"price":79,"link":"https:\/\/go.pre
 jQuery(document).ready(function($){
     jQuery('.my-color-field').wpColorPicker();
     jQuery(document).on('click', '.sticky-header-upgrade-now', function(e){
-        e.preventDefault();
-        jQuery(".sticky-header-menu ul li a:last").trigger("click");
+        //e.preventDefault();
+        //jQuery(".sticky-header-menu ul li a:last").trigger("click");
     });
+
     if(jQuery(".multiple-options").length) {
         jQuery(".multiple-options").select2({
             minimumResultsForSearch: -1
@@ -15,14 +16,13 @@ jQuery(document).ready(function($){
             minimumResultsForSearch: -1
         });
     }
-//        priceOptions = jQuery.parseJSON(priceOptions);
     jQuery(document).on("change", ".multiple-options", function(){
         priceText = jQuery(this).find("option:selected").attr("data-header");
         thisValue = jQuery(this).val();
         thisPrice = jQuery(this).find("option:selected").attr("data-price");
         if(!jQuery(this).hasClass("has-multiple-websites")) {
-            jQuery(this).closest(".rpt_plan").find("a.rpt_foot").attr("href", thisValue);
-            jQuery(this).closest(".rpt_plan").find(".rpt_price").text("$" + thisPrice);
+            jQuery(this).closest(".price-table").find("a.cart-link").attr("href", thisValue);
+            jQuery(this).closest(".price-table").find(".plan-price").text("$" + thisPrice);
         } else {
             var webOption = jQuery(".multiple-web-options").val();
             var priceSettings = priceOptions[webOption];
@@ -33,12 +33,49 @@ jQuery(document).ready(function($){
                 thisPrice = priceSettings.price;
             }
         }
-        jQuery(this).closest(".rpt_plan").find("a.rpt_foot").attr("href", thisValue);
-        jQuery(this).closest(".rpt_plan").find(".rpt_price").text("$" + thisPrice);
-        jQuery(this).closest(".rpt_plan").find(".rpt_desc").text(priceText);
+        thisOption = jQuery(this).find("option:selected").attr("data-option");
+        if(thisOption == "1_year") {
+            thisPrice = thisPrice+"<span>/year</span>";
+            priceText = "Renewals for <b>25% off</b>";
+        } else if(thisOption == "2_year") {
+            thisPrice = thisPrice+"<span>/2 years</span>";
+            priceText = "Renewals for <b>25% off</b>";
+        } else {
+            thisPrice = thisPrice+"<span>/lifetime</span>";
+            priceText = "For lifetime";
+        }
+        jQuery(this).closest(".price-table").find("a.cart-link").attr("href", thisValue);
+        jQuery(this).closest(".price-table").find(".plan-price").html("$" + thisPrice);
+        jQuery(this).closest(".price-table").find(".price-offer").html(priceText);
     });
 
     jQuery(document).on("change", ".multiple-web-options", function(){
         jQuery(".multiple-options.has-multiple-websites").trigger("change");
     });
+
+    if(jQuery(".multiple-options.has-multiple-websites").length) {
+        jQuery(".multiple-options.has-multiple-websites").trigger("change");
+    }
+	checkForPricingPos();
+	jQuery(window).on("scroll", function(){
+		checkForPricingPos();
+	});
+
+	jQuery(window).on("resize", function(){
+		checkForPricingPos();
+	});
+	function checkForPricingPos() {
+		jQuery(".bottom-position").each(function(){
+			console.log(jQuery(this).offset().top - jQuery(window).scrollTop() - jQuery(window).height());
+			if( jQuery(this).offset().top - jQuery(window).scrollTop() - jQuery(window).height() < -3) {
+				jQuery(this).closest(".price-table").removeClass("is-fixed");
+				jQuery(this).closest(".price-table").find(".price-table-bottom").prop("style", "");
+			} else {
+				jQuery(this).closest(".price-table").addClass("is-fixed");
+				jQuery(this).closest(".price-table").find(".price-table-bottom").css("top", (jQuery(window).height() - 125 )+"px");
+				jQuery(this).closest(".price-table").find(".price-table-bottom").css("left", jQuery(this).offset().left+"px");
+				jQuery(this).closest(".price-table").find(".price-table-bottom").outerWidth(jQuery(this).closest(".price-table").width());
+			}
+		});
+	}
 });

@@ -135,6 +135,40 @@ trait TraitAdminUrl {
      *
      * @return string
      */
+    public function getUrlSliderSimpleEdit($sliderID, $groupID = 0) {
+
+        return $this->createUrl(array(
+            "slider/simpleedit",
+            array(
+                'sliderid' => $sliderID,
+                'groupID'  => $groupID
+            )
+        ));
+    }
+
+    /**
+     * @param int $sliderID
+     * @param int $groupID
+     *
+     * @return string
+     */
+    public function getUrlSliderSimpleEditAddSlide($sliderID, $groupID = 0) {
+
+        return $this->createUrl(array(
+            "slider/simpleeditaddslide",
+            array(
+                'sliderid' => $sliderID,
+                'groupID'  => $groupID
+            )
+        ));
+    }
+
+    /**
+     * @param int $sliderID
+     * @param int $groupID
+     *
+     * @return string
+     */
     public function getUrlSliderMoveToTrash($sliderID, $groupID) {
         return $this->createUrl(array(
             'slider/trash',
@@ -487,7 +521,17 @@ trait TraitAdminUrl {
     public function getUrlSettingsClearCache() {
         return $this->createUrl(array(
             'settings/clearcache',
-        ), true);
+        ));
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getAjaxUrlSettingsClearCache() {
+        return $this->createAjaxUrl(array(
+            'settings/clearcache',
+        ));
     }
 
     /**

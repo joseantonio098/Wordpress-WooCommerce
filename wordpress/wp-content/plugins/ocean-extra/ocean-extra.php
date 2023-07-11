@@ -3,11 +3,11 @@
  * Plugin Name:			Ocean Extra
  * Plugin URI:			https://oceanwp.org/extension/ocean-extra/
  * Description:			Add extra features like widgets, metaboxes, import/export and a panel to activate the premium extensions.
- * Version:				1.6.3
+ * Version:				1.7.6
  * Author:				OceanWP
  * Author URI:			https://oceanwp.org/
  * Requires at least:	5.3
- * Tested up to:		5.4.1
+ * Tested up to:		5.7.2
  *
  * Text Domain: ocean-extra
  * Domain Path: /languages
@@ -86,7 +86,7 @@ final class Ocean_Extra {
 		$this->token 			= 'ocean-extra';
 		$this->plugin_url 		= plugin_dir_url( __FILE__ );
 		$this->plugin_path 		= plugin_dir_path( __FILE__ );
-		$this->version 			= '1.6.3';
+		$this->version 			= '1.7.6';
 
 		define( 'OE_URL', $this->plugin_url );
 		define( 'OE_PATH', $this->plugin_path );
@@ -94,17 +94,11 @@ final class Ocean_Extra {
         define( 'OE_FILE_PATH', __FILE__ );
 		define( 'OE_ADMIN_PANEL_HOOK_PREFIX', 'theme-panel_page_oceanwp-panel' );
 
-		// WPForms partner ID
-		add_filter( 'wpforms_upgrade_link', array( $this, 'wpforms_upgrade_link' ) );
-
 		// WooCommerce Wishlist partner ID
 		if ( class_exists( 'TInvWL_Wishlist' ) ) {
 			define( 'TINVWL_PARTNER', 'oceanwporg' );
 			define( 'TINVWL_CAMPAIGN', 'oceanwp_theme' );
 		}
-
-		// WooCommerce Variation Swatches partner ID
-		add_filter( 'gwp_affiliate_id', array( $this, 'gwp_affiliate_id' ) );
 
 		register_activation_hook( __FILE__, array( $this, 'install' ) );
 
@@ -120,7 +114,6 @@ final class Ocean_Extra {
 			require_once( OE_PATH .'/includes/panel/integrations-tab.php' );
 			require_once( OE_PATH .'/includes/panel/library.php' );
 			require_once( OE_PATH .'/includes/panel/library-shortcode.php' );
-			require_once( OE_PATH .'/includes/panel/updater.php' );
 			require_once( OE_PATH .'/includes/menu-icons/menu-icons.php' );
 			require_once( OE_PATH .'/includes/wizard/wizard.php' );
 
@@ -166,36 +159,6 @@ final class Ocean_Extra {
 			self::$_instance = new self();
 		return self::$_instance;
 	} // End instance()
-
-	/**
-	 * WPForms partner ID
-	 *
-	 * @since 1.0.0
-	 */
-	public function wpforms_upgrade_link() {
-		$url = 'https://wpforms.com/lite-upgrade/?discount=LITEUPGRADE&amp;utm_source=WordPress&amp;utm_medium=' . sanitize_key( apply_filters( 'wpforms_upgrade_link_medium', 'link' ) ) . '&amp;utm_campaign=liteplugin';
-
-		// Build final URL
-		$final_url = sprintf( 'http://www.shareasale.com/r.cfm?B=837827&U=%s&M=64312&urllink=%s', '1591020', $url );
-
-		// Return URL.
-		return esc_url( $final_url );
-	}
-
-	/**
-	 * WooCommerce Variation Swatches partner ID
-	 *
-	 * @since 1.0.0
-	 */
-	public function gwp_affiliate_id() {
-
-		// Return if the plugin is not active
-		if ( ! class_exists( 'Woo_Variation_Swatches' ) ) {
-			return;
-		}
-
-		return 69;
-	}
 
 	/**
 	 * Load the localisation file.
@@ -245,6 +208,40 @@ final class Ocean_Extra {
 	private function _log_version_number() {
 		// Log the version number.
 		update_option( $this->token . '-version', $this->version );
+	}
+
+	/**
+	 * Return the correct icon
+	 *
+	 * @param string  $icon        Icon class.
+	 * @param bool    $echo        Print string.
+	 * @param string  $class       Icon class.
+	 * @param string  $title       Optional SVG title.
+	 * @param string  $desc        Optional SVG description.
+	 * @param string  $aria_hidden Optional SVG description.
+	 * @param boolean $fallback    Fallback icon.
+	 *
+	 * @since 1.7.6
+	 * @return string OceanWP Icon.
+	 */
+	public static function oe_svg_icon( $icon, $echo = true, $class = '', $title = '', $desc = '', $aria_hidden = true, $fallback = false ) {
+
+		// Get icon class.
+		$theme_icons = oceanwp_theme_icons();
+
+		if ( function_exists( 'oceanwp_icon' ) ) {
+			oceanwp_icon( $icon, $echo, $class, $title, $desc, $aria_hidden, $fallback );
+		} else {
+
+			if( true === $echo ) {
+				echo '<i class="' . $class . ' ' . $theme_icons[ $icon ][ 'fai' ] . '"' . $aria_hidden . ' role="img"></i>';
+			} else {
+				return '<i class="' . $class . ' ' . $theme_icons[ $icon ][ 'fai' ] . '"' . $aria_hidden . ' role="img"></i>';
+			}
+
+			return;
+
+		}
 	}
 
 	/**
@@ -439,7 +436,7 @@ final class Ocean_Extra {
 			$description = html_entity_decode( htmlspecialchars_decode( oceanwp_excerpt( 40 ) ) );
 		}
 
-		// Image
+		// Image.
 		$image = '';
 		$has_img = false;
 		if ( OCEANWP_WOOCOMMERCE_ACTIVE
@@ -454,11 +451,14 @@ final class Ocean_Extra {
 			}
 		} else {
 			$get_image = wp_get_attachment_image_src( get_post_thumbnail_id( get_the_ID() ), 'full' );
-			$image = $get_image[0];
-			$has_img = true;
+
+			if ( is_array( $get_image ) ) {
+				$image = $get_image[0];
+				$has_img = true;
+			}
 		}
 
-		// Post author
+		// Post author.
 		if ( $facebook_url ) {
 			$author = $facebook_url;
 		}
@@ -580,7 +580,38 @@ final class Ocean_Extra {
 
 	}
 
-} // End Class
+} // End Class.
+
+/**
+ * Check link rel and return correct aria label
+ * @since 1.6.4
+ */
+
+if ( ! function_exists( 'ocean_link_rel' ) ) {
+
+	function ocean_link_rel( $ocean_srt, $nofollow, $target ) {
+
+		if ( $nofollow === 'yes' ) {
+			if ( $target === 'blank' ) {
+				$link_rel = 'rel="nofollow noopener noreferrer"';
+				$ocean_sr = $ocean_srt;
+			} else {
+				$link_rel = 'rel="nofollow"';
+				$ocean_sr = '';
+			}
+		} elseif ( $nofollow === 'no' || $nofollow === '' ) {
+			if ( $target === 'blank' ) {
+				$link_rel = 'rel="noopener noreferrer"';
+				$ocean_sr = $ocean_srt;
+			} else {
+				$link_rel = '';
+				$ocean_sr = '';
+			}
+		}
+
+		return array( $ocean_sr, $link_rel );
+	}
+}
 
 #--------------------------------------------------------------------------------
 #region Freemius

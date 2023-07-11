@@ -27,7 +27,7 @@
     window.premiumVerticalScroll = function ($selector, settings) {
         var self = this,
             $window = $(window),
-            isTouch = false,
+            isTouch = 'desktop' !== elementorFrontend.getCurrentDeviceMode(),
             $instance = $selector,
             checkTemps = $selector.find(".premium-vscroll-sections-wrap")
                 .length,
@@ -58,10 +58,12 @@
 
         self.init = function () {
 
-            isTouch = self.isTouchDevice();
-
             if (settings.fullTouch || (!isTouch && settings.fullSection)) {
-                self.setSectionsOverflow();
+
+                if (settings.fullCheckOverflow) {
+
+                    self.setSectionsOverflow();
+                }
             }
 
             self.setSectionsData();
@@ -123,7 +125,7 @@
 
             //If current active section is defined, then show the dots
             if (currentSection)
-                $(".premium-vscroll-dots").removeClass("premium-vscroll-dots-hide");
+                $instance.find(".premium-vscroll-dots").removeClass("premium-vscroll-dots-hide");
 
         };
 
@@ -305,14 +307,14 @@
 
         };
 
-        self.isTouchDevice = function () {
+        // self.isTouchDevice = function () {
 
-            var isTouchDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|playbook|silk|BlackBerry|BB10|Windows Phone|Tizen|Bada|webOS|IEMobile|Opera Mini)/),
-                isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0) || (navigator.maxTouchPoints));
+        //     var isTouchDevice = navigator.userAgent.match(/(iPhone|iPod|iPad|Android|playbook|silk|BlackBerry|BB10|Windows Phone|Tizen|Bada|webOS|IEMobile|Opera Mini)/),
+        //         isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0) || (navigator.maxTouchPoints));
 
-            return isTouchDevice || isTouch;
+        //     return isTouchDevice || isTouch;
 
-        };
+        // };
 
         self.getEventsPage = function (e) {
 
@@ -417,7 +419,7 @@
 
                     inScope = true;
 
-                    $(".premium-vscroll-dots, .premium-vscroll-nav-menu").removeClass("premium-vscroll-dots-hide");
+                    $instance.find(".premium-vscroll-dots, .premium-vscroll-nav-menu").removeClass("premium-vscroll-dots-hide");
 
                     if (!self.isScrolled(sectionId, direction)) {
                         return;
@@ -436,7 +438,7 @@
 
                         if ($lastselector.offset().top + $lastselector.innerHeight() - $(document).scrollTop() > 600) {
 
-                            $(".premium-vscroll-dots, .premium-vscroll-nav-menu").addClass("premium-vscroll-dots-hide");
+                            $instance.find(".premium-vscroll-dots, .premium-vscroll-nav-menu").addClass("premium-vscroll-dots-hide");
 
                         }
 
@@ -444,7 +446,7 @@
 
                         if ($lastselector.offset().top - $(document).scrollTop() > 200) {
 
-                            $(".premium-vscroll-dots, .premium-vscroll-nav-menu").addClass("premium-vscroll-dots-hide");
+                            $instance.find(".premium-vscroll-dots, .premium-vscroll-nav-menu").addClass("premium-vscroll-dots-hide");
 
                         }
 
@@ -738,20 +740,16 @@
                 $(".premium-vscroll-tooltip").hide();
 
                 if (dotIndex === $itemsList.length - 1 && !$vTarget) {
-                    $(".premium-vscroll-dots, .premium-vscroll-nav-menu").addClass("premium-vscroll-dots-hide");
+                    $instance.find(".premium-vscroll-dots, .premium-vscroll-nav-menu").addClass("premium-vscroll-dots-hide");
                 } else if (dotIndex === 0 && !$vTarget) {
                     if (
                         $instance.offset().top - $(document).scrollTop() >
                         200
                     ) {
-                        $(
-                            ".premium-vscroll-dots, .premium-vscroll-nav-menu"
-                        ).addClass("premium-vscroll-dots-hide");
+                        $instance.find(".premium-vscroll-dots, .premium-vscroll-nav-menu").addClass("premium-vscroll-dots-hide");
                     }
                 } else {
-                    $(
-                        ".premium-vscroll-dots, .premium-vscroll-nav-menu"
-                    ).removeClass("premium-vscroll-dots-hide");
+                    $instance.find(".premium-vscroll-dots, .premium-vscroll-nav-menu").removeClass("premium-vscroll-dots-hide");
                 }
             }
 
@@ -791,7 +789,7 @@
                         return;
                     }
 
-                    $(".premium-vscroll-dots, .premium-vscroll-nav-menu").removeClass("premium-vscroll-dots-hide");
+                    $instance.find(".premium-vscroll-dots, .premium-vscroll-nav-menu").removeClass("premium-vscroll-dots-hide");
 
                     self.onAnchorChange(newSectionId);
 
@@ -807,15 +805,11 @@
                             $(document).scrollTop() >
                             600
                         ) {
-                            $(
-                                ".premium-vscroll-dots, .premium-vscroll-nav-menu"
-                            ).addClass("premium-vscroll-dots-hide");
+                            $instance.find(".premium-vscroll-dots, .premium-vscroll-nav-menu").addClass("premium-vscroll-dots-hide");
                         }
                     } else if ("up" === direction) {
 
-                        $(
-                            ".premium-vscroll-dots, .premium-vscroll-nav-menu"
-                        ).addClass("premium-vscroll-dots-hide");
+                        $instance.find(".premium-vscroll-dots, .premium-vscroll-nav-menu").addClass("premium-vscroll-dots-hide");
 
                     }
                 }

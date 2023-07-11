@@ -3,14 +3,11 @@
 
 namespace Nextend\SmartSlider3\Application\Admin\Settings;
 
-
-use JEventDispatcher;
-use JPluginHelper;
 use Nextend\Framework\Form\Container\ContainerTable;
 use Nextend\Framework\Form\Element\Breakpoint;
 use Nextend\Framework\Form\Element\Hidden;
 use Nextend\Framework\Form\Element\Message\Notice;
-use Nextend\Framework\Form\Element\Mixed;
+use Nextend\Framework\Form\Element\MixedField;
 use Nextend\Framework\Form\Element\OnOff;
 use Nextend\Framework\Form\Element\Select;
 use Nextend\Framework\Form\Element\Text;
@@ -21,6 +18,7 @@ use Nextend\Framework\Form\Element\Token;
 use Nextend\Framework\Form\Form;
 use Nextend\SmartSlider3\Application\Admin\Layout\Block\Forms\Button\BlockButton;
 use Nextend\SmartSlider3\Application\Admin\TraitAdminUrl;
+use Nextend\SmartSlider3\Platform\Joomla\JoomlaShim;
 use Nextend\SmartSlider3\Settings;
 
 class ViewSettingsGeneral extends AbstractViewSettings {
@@ -168,7 +166,7 @@ class ViewSettingsGeneral extends AbstractViewSettings {
 
         $row2 = $table->createRow('translate-url-2');
 
-        $translateUrl = new Mixed($row2, 'translate-url', false, '|*|');
+        $translateUrl = new MixedField($row2, 'translate-url', false, '|*|');
         new Text($translateUrl, 'translate-url-1', n2_('From'), '', array(
             'style'          => 'width:200px;',
             'tipLabel'       => n2_('From'),
@@ -182,6 +180,6 @@ class ViewSettingsGeneral extends AbstractViewSettings {
 
         echo $form->render();
 
-        echo '<input name="namespace" value="default" type="hidden" />';
+        echo '<input name="namespace" value="default" type="hidden">';
     }
 }

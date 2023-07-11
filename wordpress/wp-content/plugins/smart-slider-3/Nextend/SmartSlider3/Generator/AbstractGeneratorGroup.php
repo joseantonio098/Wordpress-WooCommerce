@@ -2,12 +2,12 @@
 
 namespace Nextend\SmartSlider3\Generator;
 
-use Nextend\Framework\Pattern\GetPathTrait;
+use Nextend\Framework\Pattern\GetAssetsPathTrait;
 use Nextend\Framework\Url\Url;
 
 abstract class AbstractGeneratorGroup {
 
-    use GetPathTrait;
+    use GetAssetsPathTrait;
 
     protected $name = '';
 
@@ -103,6 +103,20 @@ abstract class AbstractGeneratorGroup {
         return $this->name;
     }
 
+    /**
+     * @return string
+     */
+    public function getError() {
+        return n2_('Generator not found');
+    }
+
+    /**
+     * @return string
+     */
+    public function getDocsLink() {
+        return 'https://smartslider.helpscoutdocs.com/article/1999-dynamic-slides';
+    }
+
     public function isInstalled() {
         return true;
     }
@@ -116,7 +130,7 @@ abstract class AbstractGeneratorGroup {
 
     public function getImageUrl() {
 
-        return Url::pathToUri(self::getPath() . '/dynamic.png');
+        return Url::pathToUri(self::getAssetsPath() . '/dynamic.png');
     }
 
     /**

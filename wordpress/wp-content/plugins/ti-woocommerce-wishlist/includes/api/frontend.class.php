@@ -39,9 +39,10 @@ class TInvWL_Includes_API_Frontend {
 		register_rest_route( $this->namespace . '/' . $this->rest_base, '/products',
 			array(
 				array(
-					'methods'  => WP_REST_Server::CREATABLE,
-					'callback' => array( $this, 'get_wishlist_products_data' ),
-					'args'     => $this->get_wishlist_products_params(),
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'get_wishlist_products_data' ),
+					'args'                => $this->get_wishlist_products_params(),
+					'permission_callback' => '__return_true',
 				),
 			)
 		);
@@ -85,20 +86,20 @@ class TInvWL_Includes_API_Frontend {
 		$ids = $request['ids'];
 
 		if ( $ids ) {
-			$add_class     = new TInvWL_Public_AddToWishlist( TINVWL_PREFIX );
 			$wishlist_data = array();
-			$args          = array(
+
+			$add_class = new TInvWL_Public_AddToWishlist( TINVWL_PREFIX );
+
+			$args     = array(
 				'include' => $ids,
 				'limit'   => count( $ids ),
 			);
-			$products      = wc_get_products( $args );
+			$products = wc_get_products( $args );
 
 			foreach ( $products as $product ) {
 				$wishlist_data[ $product->get_id() ] = $add_class->user_wishlist( $product );
 			}
-
-			$data['products']    = $wishlist_data;
-			$data['simple_flow'] = ( tinv_get_option( 'general', 'simple_flow' ) ) ? true : false;
+			$data['products'] = $wishlist_data;
 		}
 
 		$counter = $request['counter'];

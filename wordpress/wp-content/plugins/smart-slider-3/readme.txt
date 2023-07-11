@@ -3,8 +3,8 @@ Contributors: nextendweb
 Tags: slider, wordpress slider, image slider, layer slider, responsive slider, slideshow, fullwidth slider, post slider, horizontal slider, vertical slider, photo slider, video slider
 Donate link: https://sites.fastspring.com/nextend/product/smartslider3donate
 Requires at least: 4.9
-Tested up to: 5.4
-Stable tag: 3.4.1.8
+Tested up to: 5.7
+Stable tag: 3.5.0.9
 Requires PHP: 7.0
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -151,19 +151,21 @@ Smart Slider 3 is a community-driven project that would not be the same without 
 == Frequently Asked Questions ==
 
 = 1. How do I add the slider to my site? =
-You can add your slider by shortcode or via the widget control panel or PHP shortcode.
+You can add your slider by shortcode or via the widget control panel or PHP shortcode. Watch the [🎥 Publishing tutorial video](https://www.youtube.com/watch?v=0_ohk997NG8&list=PLSawiBnEUNfvVeY7M8Yx7UdyOpBEmoH7Z&index=9&ab_channel=NEXTEND) to learn more about the topic.
 
 = 2. Where can I reach the documentation? =
-[https://smartslider.helpscoutdocs.com//](https://smartslider.helpscoutdocs.com//)
+[https://smartslider.helpscoutdocs.com/](https://smartslider.helpscoutdocs.com/)
 
 = 3. Where is Canvas mode? =
 Canvas mode was renamed to [Absolute](
-https://smartslider.helpscoutdocs.com/article/1916-slide-editing-in-smart-slider-3#absolute). You can add Absolute layers using the toggle at the Add panel, and [switch a Default layer to Absolute](https://smartslider.helpscoutdocs.com/article/1916-slide-editing-in-smart-slider-3#faq) at layer window > Style tab > Position.
+https://smartslider.helpscoutdocs.com/article/1916-slide-editing-in-smart-slider-3#absolute). You can add Absolute positioned layers using the toggle at the Add panel, and [switch a Default layer to Absolute](https://smartslider.helpscoutdocs.com/article/1916-slide-editing-in-smart-slider-3#faq) at layer window > Style tab > Position.
 
-But we recommend working with [Default layers](
-https://smartslider.helpscoutdocs.com/article/1916-slide-editing-in-smart-slider-3#default) because the responsive behavior is better, and the slide building is much faster. Most layouts people want to create can be done with Default layers only. Absolute mode should only be used for decoration.
+But we recommend working with [Default positioned layers](
+https://smartslider.helpscoutdocs.com/article/1916-slide-editing-in-smart-slider-3#default) because the responsive behavior is better, and the slide building is much faster. Most layouts people want to create can be done with Default positioned layers only. Absolute positioned layers should only be used for decoration.
 
-= 4. What should I do when I see blank area where the slider should show or the slider doesn't work? =
+Want to learn more about Absolute positioned layers? [🎥 Check out the tutorial video!](https://www.youtube.com/watch?v=_3Knh5hMGrs&list=PLSawiBnEUNfvVeY7M8Yx7UdyOpBEmoH7Z&index=10&ab_channel=NEXTEND)
+
+= 4. Why is there an empty space where the slider should be? =
 It means that there is a JavaScript error on your site which blocks other scripts(for example Smart Slider's scripts). You can open up the browser debugger window with F12 button and check the console if it shows error or not. If you solve these errors Smart Slider should work fine.
 
 Usual problem is that you have the latest WordPress version, but your theme loads very old jQuery version (1.7 or older) and the WordPress admin bar throws a JavaScript error. In this case, you have to remove the old jQuery from your theme's functions.php.
@@ -176,11 +178,13 @@ If you are unable to solve these problems, feel free to [contact us!](https://sm
 = 6. Is Smart Slider 3 is totally responsive? =
 Smart Slider 3 is 100% responsive with each items, so it will fit perfectly into your page, regardless of the size of your desktop screen or device.
 
+Be sure you check out the tutorial video about the [🎥 Responsive Settings](https://www.youtube.com/watch?v=GUMeRd4W_bM&list=PLSawiBnEUNfvVeY7M8Yx7UdyOpBEmoH7Z&index=8&ab_channel=NEXTEND).
+
 = 7. Can I customize the fonts of the slider? =
-Yes you can customize everything for every state. (hover, active, opened) The slider comes with Google Web Font support, allowing you to pick from over a dozen font families. To make using Google Fonts even easier, we have created a font manager interface that simplifies the process and preview it.
+Yes you can customize everything for every state. (Hover, normal) The slider comes with Google Web Font support, allowing you to pick from over a dozen font families.  You can also use your own font by simply writing its name to the font family field. [Check out our tutorial video](https://youtu.be/wKFxC97lFIs?t=248) to learn how to use custom fonts.
 
 = 8. Can I show multiple instances of slider on one page? =
-Yes you can use multiple slider widgets and slider shortcodes.
+Yes, you can use as many sliders on a page as you want. But you can only use one slider once.
 
 = 9. How to include a slider in a post or a page? =
 `[smartslider3 slider=Here comes the slider id]`
@@ -205,6 +209,112 @@ Of course! Smart Slider use protocol relative urls which works fine on http:// a
 
 == Changelog ==
 
+= 3.5.0.9 - 10. June 2021 =
+* Feature: From now on your can set an Alt tag for the Slide Thumbnail. 
+* Fix: Absolute positioned layers didn't rotate. 
+* Fix: Workaround adjusted for the Safari bug which makes non-fullwidth rows create unnecessary line wrap. 
+* Fix: Slider and slide title fields are sanitized. 
+* Fix: Arrow style didn't work in preview. 
+* Fix: Empty background color caused PHP error. 
+* Fix: Force fullwidth slider might appeared offscreen in rare cases. 
+* Fix: Compatibility fix for Admin 2020 plugin. 
+* Fix: Slider flickered in Gutenberg editor in rare cases. 
+* Fix: Nested, not full width Absolute layer width couldn't be changed. 
+* Other: Editor role no longer gets access to Smart Slider on new installations.
+
+= 3.5.0.8 - 02. June 2021 =
+Warning: Smart Slider 3.5 is not backwards compatible! Before upgrading check the [possible issues and their solutions](https://smartslider.helpscoutdocs.com/article/2028-sliders-look-different-after-the-3-5-update) you might see after updating to 3.5.
+
+* New: [Speed improvements](https://smartslider3.com/blog/smart-slider-35/) which help you make Smart Slider 3 pass Core Web Vitals.
+* Removed: jQuery dependency is removed. From now on Smart Slider only uses vanilla JavaScript.
+* Removed: px+ from padding and margin values. From now on everything will be fix px value.
+* Removed: Non adaptive font resizing is removed, and from now on everything will be adaptive. If you need the adaptive scaling at the layers you created before the update which previously used non-adaptive scaling, turn on "Legacy Font Scale" at Slider settings > Developer tab.
+* Feature: Async option for non-primary CSS files.
+* Feature: Horizontal mouse wheel control option.
+* Fix: Compatibility fix for Cachify plugin.
+* Fix: Compatibility fix for WooCommerce Blocks plugin.
+* Fix: Compatibility fix for A3 Lazy Loading plugin.
+* Fix: Compatibility fix for Woodmart theme.
+* Fix: Compatibility fix for Flatsome theme.
+* Fix: Compatibility fix for Newspaper theme's tagDiv Composer.
+* Fix: LiteSpeed cache plugin's Generate Critical CSS option.
+* Fix: Twenty Seventeen theme conflict with Scroll to Slider option.
+* Fix: Divi Builder plugin caused problems with the align and max width options.
+* Fix: Fixes for RTL display that affected the Inner align, force full width calculation and arrow control positioning.
+
+= 3.4.1.17 - 08. March 2021 =
+* Feature: Remove script type attributes
+* Feature: Exclude certain Google fonts from loading
+* Feature: Allow less than 1000ms slide duration values to override the autoplay duration.
+* Fix: Compatibility with AMP for WP
+* Fix: Polylang ajax issue
+* Fix: WP Security Audit Log conflict
+* Fix: Generator fill background color end
+* Fix: WP Rocket 3.8.1 changes
+* Fix: Mouse wheel events outside the slider
+* Fix: Removal of jQuery deprecated functions
+* Other: Simplified Chinese translation
+
+
+= 3.4.1.16 - 18. January 2021 =
+* Fix: WP Rocket compatibility 
+* Fix: B tag line break in Chrome
+
+= 3.4.1.15 - 13. January 2021 =
+* Feature: PHP 8 compatibility 
+* Fix: WordPress post generator dates 
+* Fix: Thumbnail hover switching 
+* Fix: WP Rocket compatibility 
+
+= 3.4.1.14 - 26. November 2020 =
+* Feature: Accessibility improvements
+* Fix: WPRocket RocketCDN compatibility
+* Fix: Jetpack lazy loading compatibility
+* Fix: Elementor fix when no slider is selected
+* Deprecated: PX+
+
+= 3.4.1.13 - 11. November 2020 =
+* Fix: Themify themes output buffer issue
+
+= 3.4.1.12 - 11. November 2020 =
+* Fix: Layer duplication
+* Fix: Themify themes output buffer issue
+* Fix: Remove sliders from AMP pages
+* Other: Black Friday sale notice added
+
+= 3.4.1.11 - 28. October 2020 =
+* Fix: Autoptimize lazy loading cause flickering background image
+
+= 3.4.1.10 - 27. October 2020 =
+* Feature: Certain HTML tags are enabled in the Heading layer. [See the full list](https://smartslider.helpscoutdocs.com/article/1814-heading-layer#supported-tags) of supported tags. 
+* Feature: Post slug variable for WordPress Post generator
+* Fix: WP Rocket compatibility 
+* Fix: Alias switching 
+* Fix: Rename in layer list and Breakpoint value change in Safari 
+* Fix: Nested Absolute layers in column 
+* Fix: Output buffer for Speed Booster Pack cache 
+* Fix: Slider loading optimization 
+* Fix: Simply Exclude plugin added to conflict list.
+* Fix: PageSpeed ninja plugin compatibility (enabled Gzip caused missing files.)
+
+= 3.4.1.9 - 26. August 2020. =
+* Feature: Placeholder uses Min height when its set
+* Feature: BoldGrid Post and Page Builder compatibility
+* Feature: Smart Slider 3 now renders the sliders via iframe in Brizy editor
+* Fix: Clear device Keyboard Shortcuts
+* Fix: Trashed sliders showed up in the dashboard in rare cases
+* Fix: Slide Library remove localStorage slide cache to avoid quota exceeded errors.
+* Fix: Text bar animates with correct opacity
+* Fix: Firefox <a> click with keyboard
+* Fix: Beaver Builder compatibility
+* Fix: Image variables might caused errors in a Dynamic slide
+* Fix: table names changed for better JEvents compatibility
+* Fix: Redux Framework compatibility
+* Fix: Generator custom sized image variable names
+* Fix: Parallax is disabled in Mac Safari to avoid browser issues
+* Fix: Image box layer image vertical align
+* Other: Google font list updated
+
 = 3.4.1.8 - 10. June 2020. =
 * Feature: [Vimeo layer](https://smartslider.helpscoutdocs.com/article/1847-vimeo-layer#aspect-ratio) custom aspect ratio
 * Feature: [YouTube layer](https://smartslider.helpscoutdocs.com/article/1846-youtube-layer#aspect-ratio) custom aspect ratio
@@ -217,7 +327,7 @@ Of course! Smart Slider use protocol relative urls which works fine on http:// a
 * Fix: Disabled arrows for types, where there was no disabled option earlier.
 * Fix: Prevent opening multiple lightboxes at the same time
 * Fix: Slider height when vertical thumbnail hidden
-* Fix: Fix YouTube cover image flicker
+* Fix: Fix youtube cover image flicker
 * Fix: Empty slide background image after saving a slide which was created in 3.3.x version
 * Fix: Exclude Smart Slider images from A3 Lazy Load plugin to avoid problems
 * Fix: Force iframe mode when HTTP_X_REQUESTED_WITH = swup
@@ -228,7 +338,7 @@ Of course! Smart Slider use protocol relative urls which works fine on http:// a
 
 = 3.4.1.6 - 19. May 2020. =
 * Warning: 3.4 version is not backwards compatible! After installing this version, you won't be able to go back to 3.3.x.
-* Smart Slider 3.4 no longer supports [Internet Explorer browser at all](https://www.zdnet.com/article/microsoft-security-chief-ie-is-not-a-browser-so-stop-using-it-as-your-default/! 
+* Smart Slider 3.4 no longer supports [Internet Explorer browser at all](https://www.zdnet.com/article/microsoft-security-chief-ie-is-not-a-browser-so-stop-using-it-as-your-default/)! 
 * Feature: Content mode was renamed to Default and Canvas mode is now called Absolute. 
 * Feature: Completely redesigned UI 
 * Feature: [Breakpoint system](https://smartslider.helpscoutdocs.com/article/1774-slider-settings-size#breakpoints)

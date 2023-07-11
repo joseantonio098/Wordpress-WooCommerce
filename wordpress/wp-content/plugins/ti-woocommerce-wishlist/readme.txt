@@ -2,8 +2,8 @@
 Contributors: templateinvaders
 Tags: woocommerce, wishlist, woocommerce wishlist, e-commerce, ecommerce
 Requires at least: 4.7
-Tested up to: 5.4
-Stable tag: 1.20.5
+Tested up to: 5.7
+Stable tag: 1.26.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Plugin URI:  https://wordpress.org/plugins/ti-woocommerce-wishlist/
@@ -63,7 +63,7 @@ TI WooCommerce Wishlist Premium version is a powerful marketing tool on top of a
 💰 <strong>[100% Money Back Guarantee](https://templateinvaders.com/product/ti-woocommerce-wishlist-wordpress-plugin/?utm_source=wordpressorg&utm_content=money_back)</strong>
 
 = COMPATIBILITY WITH MOST USED PLUGINS/ADDONS  =
-We understand that our plugin is not the only one that you are going to use for your WooCommerce store and how it is important for different plugins to work well with each other. That is why we have added compatibility with the most used WooCommerce add-ons: [WooCommerce Bookings](https://woocommerce.com/products/woocommerce-bookings/?aff=3955), [WooCommerce Subscriptions](https://woocommerce.com/products/woocommerce-subscriptions/?aff=3955), [WooCommerce Composite Products](https://woocommerce.com/products/composite-products/?aff=3955), [WooCommerce Product Bundles](https://woocommerce.com/products/product-bundles/?aff=3955), [WooCommerce Mix and Match](https://woocommerce.com/products/woocommerce-mix-and-match-products/?aff=3955), [WooCommerce Gravity Forms Product Add-Ons](https://woocommerce.com/products/gravity-forms-add-ons/?aff=3955), [WooCommerce Gift Cards](https://wordpress.org/plugins/gift-cards-for-woocommerce/), [WooCommerce TM Extra Product Options](https://codecanyon.net/item/woocommerce-extra-product-options/7908619?ref=olegnax), [WooCommerce Product Add-ons](https://woocommerce.com/products/product-add-ons/?aff=3955).
+We understand that our plugin is not the only one that you are going to use for your WooCommerce store and how it is important for different plugins to work well with each other. That is why we have added compatibility with the most used WooCommerce add-ons: [WooCommerce Bookings](https://woocommerce.com/products/woocommerce-bookings/?aff=3955), [WooCommerce Subscriptions](https://woocommerce.com/products/woocommerce-subscriptions/?aff=3955), [WooCommerce Composite Products](https://woocommerce.com/products/composite-products/?aff=3955), [WooCommerce Product Bundles](https://woocommerce.com/products/product-bundles/?aff=3955), [WooCommerce Mix and Match](https://woocommerce.com/products/woocommerce-mix-and-match-products/?aff=3955), [WooCommerce Gravity Forms Product Add-Ons](https://woocommerce.com/products/gravity-forms-add-ons/?aff=3955), [WooCommerce Gift Cards](https://wordpress.org/plugins/gift-cards-for-woocommerce/), [WooCommerce TM Extra Product Options](https://codecanyon.net/item/woocommerce-extra-product-options/7908619), [WooCommerce Product Add-ons](https://woocommerce.com/products/product-add-ons/?aff=3955).
 It is also very important for any WordPress website to use cache plugins, so we make sure that our WooCommerce Wishlist works well with [WP Rocket](https://wp-rocket.me/), [WP Super Cache](https://wordpress.org/plugins/wp-super-cache/) and [W3 Total Cache](https://wordpress.org/plugins/w3-total-cache/) plugins.
 
 = Add to Wishlist button =
@@ -163,59 +163,51 @@ Yes, you can! Join in on our [GitHub repository](https://github.com/TemplateInva
 
 
 == Changelog ==
-= 1.20.5 =
-*Release Date - 25 June 2020*
+= 1.26.0 =
+*Release Date - 14 June 2021*
 
-* Added RTL support
-* Added integration with [WPC Product Bundles for WooCommerce](https://wordpress.org/plugins/woo-product-bundle/) plugin
-* Fixed wishlist status issue for variations
+* WooCommerce 5.4 support
+* Fixed text domain
 
-= 1.20.4 =
-*Release Date - 24 June 2020*
+= 1.25.5 =
+*Release Date - 18 May 2021*
 
-* Fixed accessibility issue for add to wishlist button markup
-* Fixed an issue with file upload for the integration of WooCommerce TM Extra Product Options plugin
-* Fixed an issue with the wrong wishlist status for add to wishlist shortcode
-* Fixed an issue when wishlist status wrong on specific variation product page load
-* Improved security for Wishlist REST API methods
-* Enhanced integration with WooCommerce Custom Product Addons plugin
-* Updated integration with WP Fastest Cache plugin
+* WooCommerce 5.3 support
+* Tweaked HTML markup for the empty wishlist template
 
-= 1.20.3 =
-*Release Date - 11 June 2020*
+= 1.25.4 =
+*Release Date - 30 April 2021*
 
-* Fixed WooCommerce Product Table integration to use proper wishlist button shortcode
-* Fixed an issue with "Already in wishlist" text for variable products
+* Fixed W3C HTML Validate issue
+* Fixed an issue for integration with [WooCommerce Composite Products](https://woocommerce.com/products/composite-products/?aff=3955) plugin
 
-= 1.20.2 =
-*Release Date - 4 June 2020*
+= 1.25.3 =
+*Release Date - 23 April 2021*
 
-* Added compatibility with WooCommerce 4.2.x
-* Added integration with WooCommerce Product Table plugin as a custom table column 'wishlist'
-* Improved integration with [Product Options and Price Calculation Formulas for WooCommerce – Uni CPO](https://wordpress.org/plugins/uni-woo-custom-product-options/) plugin
-* Fixed PHP Fatal error in case wishlist page doesn't set and forced permalinks option is active
-* Fixed an issue when custom button icon didn't save in settings
+* Fixed PHP fatal error related to WP CLI
 
+= 1.25.2 =
+*Release Date - 16 April 2021*
 
-= 1.20.1 =
-*Release Date - 14 May 2020*
+* Dismiss button added to admin notice
 
-* Fixed Wishlist REST API get_by_user method issue when an extra wishlist always created on each request
-* The href attribute removed from add to wishlist button tag
-* Wishlist REST API frontend request changed to POST method
+= 1.25.1 =
+*Release Date - 16 April 2021*
 
-= 1.20.0 =
-*Release Date - 12 May 2020*
+* Fixed PHP error for PHP versions below 7.3
 
-* Added integration with [ELEX WooCommerce Catalog Mode](https://wordpress.org/plugins/elex-woocommerce-catalog-mode/) plugin
-* Added integration with [WooCommerce Product Retailers](https://woocommerce.com/products/product-retailers/?aff=3955) plugin
-* Added integration with [Braintree For WooCommerce](https://wordpress.org/plugins/woo-payment-gateway/) plugin
-* Improved integration with WPML plugin
-* Improved integration with [WooCommerce Multilingual](https://wordpress.org/plugins/woocommerce-multilingual/) plugin
-* Improved security for Wishlist REST API
-* Fixed 'add to wishlist' button shortcode issue when product variation ID does not count for saved products
-* Fixed an issue when adding product variation that has an additional attribute(s) set as 'Any ...' to wishlist and from wishlist to cart
-* Fixed an issue with duplicated buttons for out of stock products and Divi theme
-* Fixed an issue with WP Rocket cache and WP REST API authorization for non-logged users
+= 1.25.0 =
+*Release Date - 15 April 2021*
+
+* WooCommerce 5.2 support
+* Added opt-in options for the support chat
+* Updated integration with [AutomateWoo](https://woocommerce.com/products/automatewoo/?aff=3955) plugin
+* Updated integration with WooCommerce TM Extra Product Options plugin
+* Fixed extra JavaScript alert on wishlist table bulk events
 
 [See the changelog for all versions](https://templateinvaders.com/changelogs/ti-woocommerce-wishlist-plugin-free-changelog/?utm_source=wordpressorg&utm_content=changelog).
+
+== Upgrade Notice ==
+
+= 1.25.0 =
+Added opt-in options for the support chat in plugin settings.
